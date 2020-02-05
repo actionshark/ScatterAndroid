@@ -83,12 +83,8 @@ public class Scatter {
 			dialog.setButton(R.string.cancel, R.string.confirm);
 			dialog.setOnClickListener((index) -> {
 				try {
-					if (index != 1) {
-						return;
-					}
-
 					if (callback != null) {
-						callback.onCallback(null);
+						callback.onCallback(index == 1);
 					}
 				} catch (Exception e) {
 					Log.e(Util.TAG, "confirm", e);
@@ -137,7 +133,12 @@ public class Scatter {
 	}
 
 	private void apiGetOrRequestIdentity(JSONObject data, Callback callback) {
-		showConfirmDialog(R.string.login_hint, (rst) -> {
+		showConfirmDialog(R.string.login_hint, (confirm) -> {
+			if (!(boolean) confirm) {
+				callback.onCallback(false);
+				return;
+			}
+
 			String blockchain = null;
 
 			try {
@@ -172,7 +173,12 @@ public class Scatter {
 	}
 
 	private void requestSignature(Object message, Callback callback) throws Exception {
-		showConfirmDialog(R.string.sign_hint, (rst) -> {
+		showConfirmDialog(R.string.sign_hint, (confirm) -> {
+			if (!(boolean) confirm) {
+				callback.onCallback(false);
+				return;
+			}
+
 			byte[] bs;
 
 			if (message instanceof String) {

@@ -37,7 +37,7 @@ public class ActivityAccount extends ActivityBase {
 		@Override
 		public void run() {
 			if (Server.isRunning()) {
-				mBtnOpen.setEnabled(true);
+				mBtnOpen.setText(mName == null ? R.string.open : R.string.close);
 				return;
 			}
 
@@ -57,9 +57,11 @@ public class ActivityAccount extends ActivityBase {
 		mTvName.setOnClickListener((view) -> updateInfo());
 
 		mBtnOpen = findViewById(R.id.btn_open);
-		mBtnOpen.setEnabled(false);
+		mBtnOpen.setText(R.string.wait_server);
 		mBtnOpen.setOnClickListener((view) -> {
-			if (mName == null) {
+			if (!Server.isRunning()) {
+				Toast.makeText(this, R.string.wait_server, Toast.LENGTH_SHORT).show();
+			} else if (mName == null) {
 				open();
 			} else {
 				close();

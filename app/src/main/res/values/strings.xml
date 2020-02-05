@@ -32,6 +32,7 @@
 
     <string name="account_info">余额：%1$s\ncpu：%2$d/%3$d\nnet：%4$d/%5$d</string>
 
+    <string name="wait_server">等待服务器</string>
     <string name="login_hint">是否授权登录？</string>
     <string name="sign_hint">是否授权签名？</string>
 </resources>
