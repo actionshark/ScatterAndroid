@@ -22,7 +22,6 @@ public class Util {
 		sInited = true;
 
 		Storage.init(context);
-		Eos.init(context);
 		Server.init();
 	}
 

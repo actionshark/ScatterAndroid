@@ -53,11 +53,6 @@ public class ActivityAccount extends Activity {
 		});
 
 		mTvInfo = findViewById(R.id.tv_info);
-
-		WebView webView = findViewById(R.id.wv_webview);
-		WebSettings webSettings = webView.getSettings();
-		webSettings.setJavaScriptEnabled(true);
-
 	}
 
 	private void open() {
@@ -76,14 +71,13 @@ public class ActivityAccount extends Activity {
 			}
 
 			String privateKey = Encryption.decode(password, cipher);
-			if (!Eos.isValidPrivate(privateKey)) {
+			String publicKey = Eos.privateToPublic(privateKey);
+			if (publicKey == null) {
 				Toast.makeText(ActivityAccount.this,
 						R.string.password_error,
 						Toast.LENGTH_SHORT).show();
 				return;
 			}
-
-			String publicKey = Eos.privateToPublic(privateKey);
 
 			new Thread(() -> {
 				String name = Eos.getKeyAccounts(publicKey);

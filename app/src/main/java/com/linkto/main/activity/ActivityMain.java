@@ -3,12 +3,13 @@ package com.linkto.main.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
-import com.linkto.main.core.Server;
 import com.linkto.main.util.Util;
-import com.linkto.main.core.Eos;
 import com.linkto.main.util.Storage;
 import com.linkto.scatter.R;
+
+import io.eblock.eos4j.Ecc;
 
 public class ActivityMain extends Activity {
 	@Override
