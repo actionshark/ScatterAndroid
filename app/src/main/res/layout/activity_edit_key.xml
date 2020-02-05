@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="start|center_horizontal"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:orientation="vertical"
+    android:background="#ffffff">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start|center_vertical"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:text="@string/plain_private_key" />
+    
+    <EditText
+        android:id="@+id/et_private_key"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="5dp"
+        android:gravity="start|center_vertical"
+        android:inputType="textMultiLine"
+        android:maxLength="100"
+        android:singleLine="false"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:hint="@string/input_plain_private_key"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="start|center_vertical"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:text="@string/set_password" />
+
+    <EditText
+        android:id="@+id/et_set_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:gravity="start|center_vertical"
+        android:inputType="textPassword"
+        android:maxLength="20"
+        android:singleLine="true"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:hint="@string/input_password"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="start|center_vertical"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:text="@string/repeat_password" />
+
+    <EditText
+        android:id="@+id/et_repeat_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:gravity="start|center_vertical"
+        android:inputType="textPassword"
+        android:maxLength="20"
+        android:singleLine="true"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:hint="@string/repeat_input_password"/>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:text="@string/confirm"/>
+
+</LinearLayout>

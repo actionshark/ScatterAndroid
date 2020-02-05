@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Scatter</string>
+
+    <string name="wait_a_moment">请稍等</string>
+
+    <string name="plain_private_key">明文私钥</string>
+    <string name="input_plain_private_key">请输入明文私钥</string>
+
+    <string name="set_password">设置密码</string>
+    <string name="input_password">请输入密码</string>
+
+    <string name="repeat_password">重复密码</string>
+    <string name="repeat_input_password">重复输入密码</string>
+
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+
+    <string name="import_account_success">导入账号成功</string>
+    <string name="delete_account_success">删除账号成功</string>
+    <string name="not_valid_private">非法私钥</string>
+    <string name="password_error">密码错误</string>
+    <string name="password_length_error">密码长度%1$d-%2$d</string>
+    <string name="repeat_password_error">两次输入的密码不一致</string>
+    <string name="account_not_exist">账号不存在</string>
+
+    <string name="unopened">未开启</string>
+    <string name="open">开启</string>
+    <string name="close">关闭</string>
+    <string name="delete">删除</string>
+
+    <string name="account_info">余额：%1$s\ncpu：%2$d/%3$d\nnet：%4$d/%5$d</string>
+</resources>
