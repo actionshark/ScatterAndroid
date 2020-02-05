@@ -12,7 +12,7 @@ import com.linkto.main.core.Eos;
 import com.linkto.main.util.Storage;
 import com.linkto.scatter.R;
 
-public class ActivityEditKey extends Activity {
+public class ActivityEditKey extends ActivityBase {
 	private EditText mEtPrivateKey;
 
 	private EditText mEtSetPassword;

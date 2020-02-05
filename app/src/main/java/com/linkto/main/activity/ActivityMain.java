@@ -11,7 +11,7 @@ import com.linkto.scatter.R;
 
 import io.eblock.eos4j.Ecc;
 
-public class ActivityMain extends Activity {
+public class ActivityMain extends ActivityBase {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

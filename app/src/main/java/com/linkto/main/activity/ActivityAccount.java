@@ -19,7 +19,7 @@ import com.linkto.scatter.R;
 
 import org.json.JSONObject;
 
-public class ActivityAccount extends Activity {
+public class ActivityAccount extends ActivityBase {
 	private static ActivityAccount sInstance;
 	public static ActivityAccount getInstance() {
 		return sInstance;
