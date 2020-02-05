@@ -14,9 +14,8 @@ import io.eblock.eos4j.utils.Sha;
 
 /**
  * Ecc
- * 
- * @author espritblock http://eblock.io
  *
+ * @author espritblock http://eblock.io
  */
 public class EccTool {
 
@@ -26,7 +25,7 @@ public class EccTool {
 
 	/**
 	 * seedPrivate
-	 * 
+	 *
 	 * @param seed
 	 * @return
 	 */
@@ -34,7 +33,7 @@ public class EccTool {
 		if (seed == null || seed.length() == 0) {
 			throw new EException("args_empty", "args is empty");
 		}
-		byte[] a = { (byte) 0x80 };
+		byte[] a = {(byte) 0x80};
 		byte[] b = new BigInteger(Sha.SHA256(seed)).toByteArray();
 		byte[] private_key = ByteUtils.concat(a, b);
 		byte[] checksum = Sha.SHA256(private_key);
@@ -46,7 +45,7 @@ public class EccTool {
 
 	/**
 	 * privateKey
-	 * 
+	 *
 	 * @param pk
 	 * @return
 	 */
@@ -67,7 +66,7 @@ public class EccTool {
 
 	/**
 	 * privateToPublic
-	 * 
+	 *
 	 * @param pk
 	 * @return
 	 */
@@ -90,6 +89,7 @@ public class EccTool {
 
 	/**
 	 * signHash
+	 *
 	 * @param pk
 	 * @param b
 	 * @return
@@ -131,6 +131,7 @@ public class EccTool {
 
 	/**
 	 * sign string
+	 *
 	 * @param pk
 	 * @param data
 	 * @return
@@ -171,7 +172,8 @@ public class EccTool {
 	}
 
 	/**
-	 * signTransaction 
+	 * signTransaction
+	 *
 	 * @param privateKey
 	 * @param push
 	 * @return

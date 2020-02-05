@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Permission {

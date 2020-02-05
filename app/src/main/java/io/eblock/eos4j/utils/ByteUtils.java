@@ -7,9 +7,7 @@ import java.text.NumberFormat;
 import java.util.stream.IntStream;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 public class ByteUtils {
 
@@ -17,7 +15,7 @@ public class ByteUtils {
 
 	/**
 	 * charidx
-	 * 
+	 *
 	 * @param c
 	 * @return
 	 */
@@ -27,7 +25,7 @@ public class ByteUtils {
 
 	/**
 	 * concat
-	 * 
+	 *
 	 * @param a
 	 * @param b
 	 * @return
@@ -41,7 +39,7 @@ public class ByteUtils {
 
 	/**
 	 * copy
-	 * 
+	 *
 	 * @param a
 	 * @param b
 	 * @return
@@ -54,7 +52,7 @@ public class ByteUtils {
 
 	/**
 	 * copy
-	 * 
+	 *
 	 * @param a
 	 * @param b
 	 * @return
@@ -66,7 +64,7 @@ public class ByteUtils {
 
 	/**
 	 * LongToBytes
-	 * 
+	 *
 	 * @param values
 	 * @return
 	 */
@@ -78,7 +76,6 @@ public class ByteUtils {
 	}
 
 	/**
-	 * 
 	 * @param value
 	 * @return
 	 */
@@ -97,7 +94,7 @@ public class ByteUtils {
 
 	/**
 	 * writerUnit32
-	 * 
+	 *
 	 * @param value
 	 * @return
 	 */
@@ -123,55 +120,55 @@ public class ByteUtils {
 
 	/**
 	 * writerUnit16
-	 * 
+	 *
 	 * @param value
 	 * @return
 	 */
 	public static byte[] writerUnit16(String value) {
 		long vl = Long.parseLong(value);
-		return new byte[] { (byte) (vl & 0x00FF), (byte) ((vl & 0xFF00) >>> 8) };
+		return new byte[]{(byte) (vl & 0x00FF), (byte) ((vl & 0xFF00) >>> 8)};
 	}
 
 	/**
 	 * writerUnit8
-	 * 
+	 *
 	 * @param value
 	 * @return
 	 */
 	public static byte[] writerUnit8(String value) {
 		long vl = Long.parseLong(value);
-		return new byte[] { (byte) (vl & 0x00FF) };
+		return new byte[]{(byte) (vl & 0x00FF)};
 	}
 
 	/**
 	 * writerVarint32
-	 * 
+	 *
 	 * @param v
 	 * @return
 	 */
 	public static byte[] writerVarint32(String v) {
 		long value = Long.parseLong(v);
-		byte[] a = new byte[] {};
+		byte[] a = new byte[]{};
 		value >>>= 0;
 		while (value >= 0x80) {
 			long b = (value & 0x7f) | 0x80;
-			a = ByteUtils.concat(a, new byte[] { (byte) b });
+			a = ByteUtils.concat(a, new byte[]{(byte) b});
 			value >>>= 7;
 		}
-		a = ByteUtils.concat(a, new byte[] { (byte) value });
+		a = ByteUtils.concat(a, new byte[]{(byte) value});
 		return a;
 	}
 
 	/**
 	 * writerAsset
-	 * 
+	 *
 	 * @param v
 	 * @return
 	 */
 	public static byte[] writerAsset(String v) {
 		String _value[] = v.split(" ");
 		String amount = _value[0];
-		if(amount==null || !amount.matches("^[0-9]+(.[0-9]+)?$")){
+		if (amount == null || !amount.matches("^[0-9]+(.[0-9]+)?$")) {
 			throw new EException("amount_error", "amount error");
 		}
 		String sym = _value[1];
@@ -182,8 +179,8 @@ public class ByteUtils {
 		int pad = Integer.parseInt(precision);
 		StringBuffer bf = new StringBuffer(part[0] + ".");
 		if (part.length > 1) {
-			if(part[1].length()>pad) {
-				throw new EException("precision_error", "precision max "+pad);
+			if (part[1].length() > pad) {
+				throw new EException("precision_error", "precision max " + pad);
 			}
 			pad = Integer.parseInt(precision) - part[1].length();
 			bf.append(part[1]);
@@ -208,17 +205,17 @@ public class ByteUtils {
 		ByteBuffer ba = ByteBuffer.wrap(asset.getBytes());
 		return ByteUtils.concat(ammount.array(), ba.array());
 	}
-	
+
 	/**
 	 * writerAsset
-	 * 
+	 *
 	 * @param v
 	 * @return
 	 */
 	public static byte[] writerSymbol(String v) {
 		String _value[] = v.split(" ");
 		String amount = _value[0];
-		if(amount==null || !amount.matches("^[0-9]+(.[0-9]+)?$")){
+		if (amount == null || !amount.matches("^[0-9]+(.[0-9]+)?$")) {
 			throw new EException("amount_error", "amount error");
 		}
 		String sym = _value[1];
@@ -229,8 +226,8 @@ public class ByteUtils {
 		int pad = Integer.parseInt(precision);
 		StringBuffer bf = new StringBuffer(part[0] + ".");
 		if (part.length > 1) {
-			if(part[1].length()>pad) {
-				throw new EException("precision_error", "precision max "+pad);
+			if (part[1].length() > pad) {
+				throw new EException("precision_error", "precision max " + pad);
 			}
 			pad = Integer.parseInt(precision) - part[1].length();
 			bf.append(part[1]);
@@ -258,7 +255,7 @@ public class ByteUtils {
 
 	/**
 	 * writerAccount
-	 * 
+	 *
 	 * @param v
 	 * @return
 	 */
@@ -292,7 +289,7 @@ public class ByteUtils {
 
 	/**
 	 * charCount
-	 * 
+	 *
 	 * @return
 	 */
 	private static long charCount(String v) {
@@ -313,20 +310,20 @@ public class ByteUtils {
 
 	/**
 	 * writerString
-	 * 
+	 *
 	 * @param v
 	 * @return
 	 */
 	public static byte[] writerString(String v) {
 		long value = charCount(v);
-		byte[] a = new byte[] {};
+		byte[] a = new byte[]{};
 		value >>>= 0;
 		while (value >= 0x80) {
 			long b = (value & 0x7f) | 0x80;
-			a = ByteUtils.concat(a, new byte[] { (byte) b });
+			a = ByteUtils.concat(a, new byte[]{(byte) b});
 			value >>>= 7;
 		}
-		a = ByteUtils.concat(a, new byte[] { (byte) value });
+		a = ByteUtils.concat(a, new byte[]{(byte) value});
 		for (char c : v.toCharArray()) {
 			a = ByteUtils.concat(a, decodeChar(c));
 		}
@@ -335,7 +332,7 @@ public class ByteUtils {
 
 	/**
 	 * decodeChar
-	 * 
+	 *
 	 * @param ca
 	 * @return
 	 */
@@ -343,28 +340,28 @@ public class ByteUtils {
 		long cp = (long) ca;
 		if (cp < 0x80) {
 			long a = cp & 0x7F;
-			return new byte[] { (byte) a };
+			return new byte[]{(byte) a};
 		} else if (cp < 0x800) {
 			long a = ((cp >> 6) & 0x1F) | 0xC0;
 			long b = (cp & 0x3F) | 0x80;
-			return new byte[] { (byte) a, (byte) b };
+			return new byte[]{(byte) a, (byte) b};
 		} else if (cp < 0x10000) {
 			long a = ((cp >> 12) & 0x0F) | 0xE0;
 			long b = ((cp >> 6) & 0x3F) | 0x80;
 			long c = (cp & 0x3F) | 0x80;
-			return new byte[] { (byte) a, (byte) b, (byte) c };
+			return new byte[]{(byte) a, (byte) b, (byte) c};
 		} else {
 			long a = ((cp >> 18) & 0x07) | 0xF0;
 			long b = ((cp >> 12) & 0x3F) | 0x80;
 			long c = ((cp >> 6) & 0x3F) | 0x80;
 			long d = (cp & 0x3F) | 0x80;
-			return new byte[] { (byte) a, (byte) b, (byte) c, (byte) d };
+			return new byte[]{(byte) a, (byte) b, (byte) c, (byte) d};
 		}
 	}
 
 	/**
 	 * writerKey
-	 * 
+	 *
 	 * @param v
 	 * @return
 	 */
@@ -378,7 +375,7 @@ public class ByteUtils {
 
 	/**
 	 * writerKey
-	 * 
+	 *
 	 * @param key
 	 */
 	public static byte[] writerKey(String key) {
@@ -392,7 +389,7 @@ public class ByteUtils {
 		bf.concat(writerVarint32("0"));
 		return bf.getBuffer();
 	}
-	
+
 	public static byte[] writeUint64(String v) {
 		return ByteBuffer.allocate(Long.BYTES).order(ByteOrder.LITTLE_ENDIAN).putLong(Long.parseLong(v)).array();
 	}

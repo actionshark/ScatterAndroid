@@ -1,8 +1,9 @@
 package com.linkto.main.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,6 +32,19 @@ public class ActivityAccount extends ActivityBase {
 
 	private String mName;
 
+	private Handler mHandler;
+	private Runnable mServerCheck = new Runnable() {
+		@Override
+		public void run() {
+			if (Server.isRunning()) {
+				mBtnOpen.setEnabled(true);
+				return;
+			}
+
+			mHandler.postDelayed(mServerCheck, 200);
+		}
+	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,6 +57,7 @@ public class ActivityAccount extends ActivityBase {
 		mTvName.setOnClickListener((view) -> updateInfo());
 
 		mBtnOpen = findViewById(R.id.btn_open);
+		mBtnOpen.setEnabled(false);
 		mBtnOpen.setOnClickListener((view) -> {
 			if (mName == null) {
 				open();
@@ -50,6 +65,9 @@ public class ActivityAccount extends ActivityBase {
 				close();
 			}
 		});
+
+		mHandler = new Handler(Looper.getMainLooper());
+		mHandler.post(mServerCheck);
 
 		findViewById(R.id.btn_delete).setOnClickListener((view) -> {
 			DialogSimple dialogSimple = new DialogSimple(this);

@@ -19,6 +19,7 @@ public class Util {
 	public static final String PRIVATE_KEY_CIPHER = "private_key_cipher";
 
 	private static boolean sInited = false;
+
 	public synchronized static void init(Context context) {
 		if (sInited) {
 			return;
@@ -30,7 +31,7 @@ public class Util {
 		Server.init();
 	}
 
-	private static final char[] HEX_CHARS = new char[] {
+	private static final char[] HEX_CHARS = new char[]{
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 			'a', 'b', 'c', 'd', 'e', 'f',
 	};
@@ -68,7 +69,7 @@ public class Util {
 		for (int i = 0; i < bs.length; i++) {
 			int a = charToInt(hex.charAt(i << 2));
 			int b = charToInt(hex.charAt((i << 2) + 1));
-			bs[i] = (byte)((a << 4) | b);
+			bs[i] = (byte) ((a << 4) | b);
 		}
 
 		return bs;

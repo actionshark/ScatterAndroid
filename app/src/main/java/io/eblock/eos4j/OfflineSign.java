@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.eblock.eos4j.api.vo.SignParam;
@@ -20,9 +21,7 @@ import io.eblock.eos4j.ese.DataType;
 import io.eblock.eos4j.ese.Ese;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 public class OfflineSign {
 
@@ -33,7 +32,6 @@ public class OfflineSign {
 	}
 
 	/**
-	 * 
 	 * @param compression
 	 * @param pushTransaction
 	 * @param signatures
@@ -48,7 +46,7 @@ public class OfflineSign {
 
 	/**
 	 * 离线签名转账
-	 * 
+	 *
 	 * @param signParam
 	 * @param pk
 	 * @param contractAccount
@@ -60,7 +58,7 @@ public class OfflineSign {
 	 * @throws Exception
 	 */
 	public String transfer(SignParam signParam, String pk, String contractAccount, String from, String to,
-			String quantity, String memo) throws Exception {
+						   String quantity, String memo) throws Exception {
 		Tx tx = new Tx();
 		tx.setExpiration(signParam.getHeadBlockTime().getTime() / 1000 + signParam.getExp());
 		tx.setRef_block_num(signParam.getLastIrreversibleBlockNum());
@@ -88,12 +86,12 @@ public class OfflineSign {
 		action.setData(data);
 		// reset expiration
 		tx.setExpiration(dateFormatter.format(new Date(1000 * Long.parseLong(tx.getExpiration().toString()))));
-		return pushTransaction("none", tx, new String[] { sign });
+		return pushTransaction("none", tx, new String[]{sign});
 	}
 
 	/**
 	 * 离线签名创建账户
-	 * 
+	 *
 	 * @param signParam
 	 * @param pk
 	 * @param creator
@@ -105,7 +103,7 @@ public class OfflineSign {
 	 * @throws Exception
 	 */
 	public String createAccount(SignParam signParam, String pk, String creator, String newAccount, String owner,
-			String active, Long buyRam) throws Exception {
+								String active, Long buyRam) throws Exception {
 		Tx tx = new Tx();
 		tx.setExpiration(signParam.getHeadBlockTime().getTime() / 1000 + signParam.getExp());
 		tx.setRef_block_num(signParam.getLastIrreversibleBlockNum());
@@ -141,6 +139,6 @@ public class OfflineSign {
 		buyAction.setData(ramData);
 		// reset expiration
 		tx.setExpiration(dateFormatter.format(new Date(1000 * Long.parseLong(tx.getExpiration().toString()))));
-		return pushTransaction("none", tx, new String[] { sign });
+		return pushTransaction("none", tx, new String[]{sign});
 	}
 }

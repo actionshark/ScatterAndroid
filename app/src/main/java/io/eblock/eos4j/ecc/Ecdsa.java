@@ -11,9 +11,8 @@ import io.eblock.eos4j.utils.Sha;
 
 /**
  * Ecdsa
- * 
- * @author espritblock http://eblock.io
  *
+ * @author espritblock http://eblock.io
  */
 public class Ecdsa {
 
@@ -25,7 +24,7 @@ public class Ecdsa {
 
 	/**
 	 * sign
-	 * 
+	 *
 	 * @param dataHash
 	 * @param d
 	 * @param nonce
@@ -45,7 +44,7 @@ public class Ecdsa {
 
 	/**
 	 * toDER
-	 * 
+	 *
 	 * @param big
 	 * @return
 	 */
@@ -74,7 +73,7 @@ public class Ecdsa {
 	}
 
 	private BigInteger deterministicGenerateK(Secp256k curve, String dataHash, BigInteger d, int nonce,
-			SignBigInt big) {
+											  SignBigInt big) {
 		byte[] hash = Hex.hexStringToBytes(dataHash);
 		if (nonce > 0) {
 			hash = Sha.SHA256(ByteUtils.concat(hash, new byte[nonce]));
@@ -111,14 +110,14 @@ public class Ecdsa {
 		Arrays.fill(k, (byte) 0x00);
 
 		// d
-		byte[] db = ByteUtils.concat(ByteUtils.concat(ByteUtils.concat(v, new byte[] { 0 }), x), hash);
+		byte[] db = ByteUtils.concat(ByteUtils.concat(ByteUtils.concat(v, new byte[]{0}), x), hash);
 
 		k = Sha.HmacSHA256(db, k);
 
 		// e
 		v = Sha.HmacSHA256(v, k);
 		// f
-		byte[] fb = ByteUtils.concat(ByteUtils.concat(ByteUtils.concat(v, new byte[] { 1 }), x), hash);
+		byte[] fb = ByteUtils.concat(ByteUtils.concat(ByteUtils.concat(v, new byte[]{1}), x), hash);
 		k = Sha.HmacSHA256(fb, k);
 		// g
 		v = Sha.HmacSHA256(v, k);
@@ -132,7 +131,7 @@ public class Ecdsa {
 
 		Boolean check = checkSig(T, d, e, big);
 		while (T.signum() <= 0 || T.compareTo(curve.n()) >= 0 || !check) {
-			k = Sha.HmacSHA256(ByteUtils.concat(v, new byte[] { 0 }), k);
+			k = Sha.HmacSHA256(ByteUtils.concat(v, new byte[]{0}), k);
 			v = Sha.HmacSHA256(v, k);
 			v = Sha.HmacSHA256(v, k);
 			T = new BigInteger(v);
@@ -144,7 +143,7 @@ public class Ecdsa {
 
 	/**
 	 * checkSig
-	 * 
+	 *
 	 * @param k
 	 * @param d
 	 * @param e
@@ -167,9 +166,7 @@ public class Ecdsa {
 	}
 
 	/**
-	 * 
 	 * @author espritblock http://eblock.io
-	 *
 	 */
 	public static class SignBigInt {
 		private BigInteger k;

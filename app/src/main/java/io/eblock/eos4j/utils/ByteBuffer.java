@@ -1,13 +1,11 @@
 package io.eblock.eos4j.utils;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 public class ByteBuffer {
 
-	private byte[] buffer = new byte[] {};
+	private byte[] buffer = new byte[]{};
 
 	public void concat(byte[] b) {
 

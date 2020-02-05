@@ -2,9 +2,8 @@ package io.eblock.eos4j.ese;
 
 /**
  * Action
- * 
- * @author espritblock http://eblock.io
  *
+ * @author espritblock http://eblock.io
  */
 public enum Action {
 

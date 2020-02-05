@@ -67,13 +67,13 @@ public class DialogSimple extends Dialog {
 	}
 
 	public void setContent(Object resId) {
-		 TextView tv = findViewById(R.id.tv_content);
+		TextView tv = findViewById(R.id.tv_content);
 
-		 if (resId instanceof Integer) {
-		 	tv.setText((int) resId);
-		 } else if (resId instanceof String) {
-		 	tv.setText((String) resId);
-		 }
+		if (resId instanceof Integer) {
+			tv.setText((int) resId);
+		} else if (resId instanceof String) {
+			tv.setText((String) resId);
+		}
 	}
 
 	public void setButton(Object... texts) {

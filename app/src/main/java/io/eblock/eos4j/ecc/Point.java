@@ -4,9 +4,8 @@ import java.math.BigInteger;
 
 /**
  * Point
- * 
- * @author espritblock  http://eblock.io
  *
+ * @author espritblock  http://eblock.io
  */
 public class Point {
 

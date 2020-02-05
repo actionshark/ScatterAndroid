@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.deser.Deserializers.Base;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Transaction extends Base {

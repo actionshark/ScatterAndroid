@@ -14,6 +14,7 @@ public class Server {
 	private static final int PORT = 50005;
 
 	private static WebSocketServer sWebSocketServer;
+	private static boolean sIsRunning = false;
 
 	private static Scatter sScatter;
 
@@ -27,11 +28,14 @@ public class Server {
 		return sScatter;
 	}
 
+	public static synchronized boolean isRunning() {
+		return sIsRunning;
+	}
+
 	private synchronized static void start() {
 		if (sWebSocketServer != null) {
 			try {
 				sWebSocketServer.stop();
-				sWebSocketServer = null;
 			} catch (Exception e) {
 				Log.e(Util.TAG, "WebSocket.stop", e);
 			}
@@ -63,6 +67,10 @@ public class Server {
 			public void onError(WebSocket webSocket, Exception e) {
 				Log.d(Util.TAG, "WebSocket.onError()", e);
 
+				synchronized (Server.class) {
+					sIsRunning = false;
+				}
+
 				new Thread(() -> {
 					try {
 						Thread.sleep(3000);
@@ -77,6 +85,10 @@ public class Server {
 			@Override
 			public void onStart() {
 				Log.d(Util.TAG, "WebSocket.onStart()");
+
+				synchronized (Server.class) {
+					sIsRunning = true;
+				}
 			}
 		};
 

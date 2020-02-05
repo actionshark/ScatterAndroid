@@ -20,7 +20,7 @@ public class Base58 {
 
 	/**
 	 * encode
-	 * 
+	 *
 	 * @param input
 	 * @return
 	 */
@@ -59,7 +59,7 @@ public class Base58 {
 
 	/**
 	 * decode
-	 * 
+	 *
 	 * @param input
 	 * @return
 	 * @throws IllegalArgumentException
@@ -102,7 +102,7 @@ public class Base58 {
 
 	/**
 	 * decodeToBigInteger
-	 * 
+	 *
 	 * @param input
 	 * @return
 	 * @throws IllegalArgumentException
@@ -113,7 +113,7 @@ public class Base58 {
 
 	/**
 	 * divmod58
-	 * 
+	 *
 	 * @param number
 	 * @param startAt
 	 * @return
@@ -131,7 +131,7 @@ public class Base58 {
 
 	/**
 	 * divmod256
-	 * 
+	 *
 	 * @param number58
 	 * @param startAt
 	 * @return
@@ -149,7 +149,7 @@ public class Base58 {
 
 	/**
 	 * copyOfRange
-	 * 
+	 *
 	 * @param source
 	 * @param from
 	 * @param to

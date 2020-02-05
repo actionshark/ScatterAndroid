@@ -5,9 +5,7 @@ import io.eblock.eos4j.api.vo.SignParam;
 import io.eblock.eos4j.api.vo.transaction.Transaction;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 public class OfflineTest {
 

@@ -2,9 +2,8 @@ package io.eblock.eos4j.utils;
 
 /**
  * exception
- * 
- * @author espritblock  http://eblock.io
  *
+ * @author espritblock  http://eblock.io
  */
 public class EException extends RuntimeException {
 

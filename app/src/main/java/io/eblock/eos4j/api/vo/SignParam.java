@@ -3,9 +3,7 @@ package io.eblock.eos4j.api.vo;
 import java.util.Date;
 
 /**
- * 
- *  @author espritblock http://eblock.io
- *
+ * @author espritblock http://eblock.io
  */
 public class SignParam {
 	/**

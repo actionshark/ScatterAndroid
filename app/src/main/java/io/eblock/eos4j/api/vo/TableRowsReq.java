@@ -10,8 +10,8 @@ public class TableRowsReq {
 	private String scope;
 
 	private String table;
-	
-	private Boolean json=true;
+
+	private Boolean json = true;
 
 	private int limit = 10;
 

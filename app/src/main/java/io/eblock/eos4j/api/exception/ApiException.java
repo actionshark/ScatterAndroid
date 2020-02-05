@@ -1,14 +1,12 @@
 package io.eblock.eos4j.api.exception;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 public class ApiException extends RuntimeException {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 

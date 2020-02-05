@@ -15,9 +15,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 public interface RpcService {
 

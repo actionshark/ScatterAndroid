@@ -9,9 +9,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * SHA
- * 
- * @author espritblock http://eblock.io
  *
+ * @author espritblock http://eblock.io
  */
 public class Sha {
 
@@ -19,7 +18,7 @@ public class Sha {
 
 	/**
 	 * sha256
-	 * 
+	 *
 	 * @param text
 	 * @return
 	 */
@@ -42,7 +41,7 @@ public class Sha {
 
 	/**
 	 * sha256
-	 * 
+	 *
 	 * @param text
 	 * @return
 	 */
@@ -65,7 +64,7 @@ public class Sha {
 
 	/**
 	 * HMACSHA256
-	 * 
+	 *
 	 * @param data
 	 * @param key
 	 * @return

@@ -6,9 +6,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RequiredAuth {

@@ -3,9 +3,7 @@ package io.eblock.eos4j.api.exception;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 public class ErrorDetails {
 

@@ -1,9 +1,7 @@
 package io.eblock.eos4j.api.exception;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 public class ApiError {
 

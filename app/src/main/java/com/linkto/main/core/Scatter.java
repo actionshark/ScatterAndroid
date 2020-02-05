@@ -71,7 +71,12 @@ public class Scatter {
 	}
 
 	private void showConfirmDialog(Object hint, Callback callback) {
+		if (mAccountName == null) {
+			return;
+		}
+
 		Activity activity = ActivityAccount.getInstance();
+
 		activity.runOnUiThread(() -> {
 			DialogSimple dialog = new DialogSimple(activity);
 			dialog.setContent(hint);
@@ -92,9 +97,9 @@ public class Scatter {
 				}
 			});
 			dialog.show();
-
-			Util.changeToForeground(activity);
 		});
+
+		Util.changeToForeground(activity);
 	}
 
 	private void typePair(WebSocket webSocket, JSONObject data) {

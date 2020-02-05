@@ -3,9 +3,7 @@ package io.eblock.eos4j.api.vo.account;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NetLimit {

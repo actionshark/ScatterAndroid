@@ -5,25 +5,28 @@ import io.eblock.eos4j.utils.EException;
 
 /**
  * DataParam
- * 
- * @author espritblock http://eblock.io
  *
+ * @author espritblock http://eblock.io
  */
 public class DataParam {
 
 	public DataParam(String value, DataType type, Action action) {
 		this.value = value;
 		this.type = type;
-		if (type == DataType.asset || type == DataType.symbol ) {
+		if (type == DataType.asset || type == DataType.symbol) {
 			if (action == action.transfer || action == action.delegate || action == action.close) {
 				String vs[] = value.split(" ");
-				if (vs.length < 2) {throw new EException("error", "quantity error");}
+				if (vs.length < 2) {
+					throw new EException("error", "quantity error");
+				}
 				String ammount = vs[0];
-				String ams [] = ammount.split("[.]");
+				String ams[] = ammount.split("[.]");
 				int precision = 0;
-				if(ams.length>1) {precision = ams[1].length();}
-				this.value = vs[0] + " " + action.getCode().replace("${precision}",String.valueOf(precision)).replace("${quantity}", vs[1]);
-			}else {
+				if (ams.length > 1) {
+					precision = ams[1].length();
+				}
+				this.value = vs[0] + " " + action.getCode().replace("${precision}", String.valueOf(precision)).replace("${quantity}", vs[1]);
+			} else {
 				this.value = value;
 			}
 		}
@@ -54,7 +57,7 @@ public class DataParam {
 			return ByteUtils.writeName(this.value);
 		} else if (this.type == DataType.asset) {
 			return ByteUtils.writerAsset(this.value);
-		}else if (this.type == DataType.symbol) {
+		} else if (this.type == DataType.symbol) {
 			return ByteUtils.writerSymbol(this.value);
 		} else if (this.type == DataType.unit32) {
 			return ByteUtils.writerUnit32(this.value);

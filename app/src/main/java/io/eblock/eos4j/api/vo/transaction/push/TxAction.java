@@ -6,9 +6,7 @@ import java.util.List;
 import io.eblock.eos4j.api.vo.BaseVo;
 
 /**
- * 
  * @author espritblock http://eblock.io
- *
  */
 public class TxAction extends BaseVo {
 

@@ -7,9 +7,8 @@ import io.eblock.eos4j.utils.EException;
 
 /**
  * FieldElement
- * 
- * @author espritblock http://eblock.io
  *
+ * @author espritblock http://eblock.io
  */
 public class FieldElement {
 
@@ -132,7 +131,7 @@ public class FieldElement {
 			Vl = Vl.multiply(Vl).subtract(Ql.shiftLeft(1)).mod(p);
 			Ql = Ql.multiply(Ql).mod(p);
 		}
-		return new BigInteger[] { Uh, Vl };
+		return new BigInteger[]{Uh, Vl};
 	}
 
 	public BigInteger toBigInteger() {

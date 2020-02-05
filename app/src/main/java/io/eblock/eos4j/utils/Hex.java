@@ -2,15 +2,14 @@ package io.eblock.eos4j.utils;
 
 /**
  * Hex
- * 
- * @author espritblock http://eblock.io
  *
+ * @author espritblock http://eblock.io
  */
 public class Hex {
 
 	/**
 	 * toBytes
-	 * 
+	 *
 	 * @param hexString
 	 * @return
 	 */
@@ -37,7 +36,7 @@ public class Hex {
 
 	/**
 	 * bytesToHexString
-	 * 
+	 *
 	 * @param src
 	 * @return
 	 */
@@ -59,7 +58,7 @@ public class Hex {
 
 	/**
 	 * hexStringToBytes
-	 * 
+	 *
 	 * @param hexString
 	 * @return
 	 */

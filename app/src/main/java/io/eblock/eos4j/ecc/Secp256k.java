@@ -6,9 +6,8 @@ import io.eblock.eos4j.utils.Hex;
 
 /**
  * Curve
- * 
- * @author espritblock  http://eblock.io
  *
+ * @author espritblock  http://eblock.io
  */
 public class Secp256k {
 

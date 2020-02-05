@@ -15,8 +15,8 @@ public class ObjectUtils {
 		try {
 			String firstLetter = fieldName.substring(0, 1).toUpperCase();
 			String getter = "get" + firstLetter + fieldName.substring(1);
-			Method method = o.getClass().getMethod(getter, new Class[] {});
-			Object value = method.invoke(o, new Object[] {});
+			Method method = o.getClass().getMethod(getter, new Class[]{});
+			Object value = method.invoke(o, new Object[]{});
 			return value;
 		} catch (Exception e) {
 			return null;
@@ -25,7 +25,7 @@ public class ObjectUtils {
 
 	/**
 	 * Bean2Map
-	 * 
+	 *
 	 * @param obj
 	 * @return
 	 */
@@ -116,15 +116,15 @@ public class ObjectUtils {
 					bf.concat(ByteUtils.writerAsset(obj.toString()));
 				} else if ("transfer".equals(key)) {
 					bf.concat(ByteUtils.writerUnit8(obj.toString()));
-				}else if ("voter".equals(key)) {
+				} else if ("voter".equals(key)) {
 					bf.concat(ByteUtils.writeName(obj.toString()));
-				}else if ("proxy".equals(key)) {
+				} else if ("proxy".equals(key)) {
 					bf.concat(ByteUtils.writeName(obj.toString()));
-				}else if ("producer".equals(key)) {
+				} else if ("producer".equals(key)) {
 					bf.concat(ByteUtils.writeName(obj.toString()));
-				}else if ("close-owner".equals(key)) {
+				} else if ("close-owner".equals(key)) {
 					bf.concat(ByteUtils.writeName(obj.toString()));
-				}else if ("close-symbol".equals(key)) {
+				} else if ("close-symbol".equals(key)) {
 					bf.concat(ByteUtils.writerSymbol(obj.toString()));
 				}
 			}
@@ -141,14 +141,14 @@ public class ObjectUtils {
 				for (Object ob : (List) obj) {
 					writeBytes(ob, bf);
 				}
-			}else if ("producers".equals(key)) {
+			} else if ("producers".equals(key)) {
 				bf.concat(ByteUtils.writerVarint32(String.valueOf(((List) obj).size())));
 				for (Object ob : (List) obj) {
-					Map<String,Object> mp = new HashMap<>();
+					Map<String, Object> mp = new HashMap<>();
 					mp.put("producer", ob);
 					writeBytes(mp, bf);
 				}
-			}else {
+			} else {
 				writeBytes(obj, bf);
 			}
 		}

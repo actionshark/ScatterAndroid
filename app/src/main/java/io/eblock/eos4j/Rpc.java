@@ -43,7 +43,7 @@ public class Rpc {
 
 	/**
 	 * 获得链信息
-	 * 
+	 *
 	 * @return
 	 */
 	public ChainInfo getChainInfo() {
@@ -52,9 +52,8 @@ public class Rpc {
 
 	/**
 	 * 获得区块信息
-	 * 
-	 * @param blockNumberOrId
-	 *            区块ID或者高度
+	 *
+	 * @param blockNumberOrId 区块ID或者高度
 	 * @return
 	 */
 	public Block getBlock(String blockNumberOrId) {
@@ -63,9 +62,8 @@ public class Rpc {
 
 	/**
 	 * 获得账户信息
-	 * 
-	 * @param account
-	 *            账户名称
+	 *
+	 * @param account 账户名称
 	 * @return
 	 */
 	public Account getAccount(String account) {
@@ -74,7 +72,7 @@ public class Rpc {
 
 	/**
 	 * 获得table数据
-	 * 
+	 *
 	 * @param req
 	 * @return
 	 */
@@ -84,13 +82,10 @@ public class Rpc {
 
 	/**
 	 * 发送请求
-	 * 
-	 * @param compression
-	 *            压缩
-	 * @param pushTransaction
-	 *            交易
-	 * @param signatures
-	 *            签名
+	 *
+	 * @param compression     压缩
+	 * @param pushTransaction 交易
+	 * @param signatures      签名
 	 * @return
 	 * @throws Exception
 	 */
@@ -104,7 +99,7 @@ public class Rpc {
 
 	/**
 	 * 发送交易
-	 * 
+	 *
 	 * @param tx
 	 * @return
 	 * @throws Exception
@@ -117,9 +112,8 @@ public class Rpc {
 
 	/**
 	 * 获取离线签名参数
-	 * 
-	 * @param exp
-	 *            过期时间秒
+	 *
+	 * @param exp 过期时间秒
 	 * @return
 	 */
 	public SignParam getOfflineSignParams(Long exp) {
@@ -136,19 +130,13 @@ public class Rpc {
 
 	/**
 	 * 转账
-	 * 
-	 * @param pk
-	 *            私钥
-	 * @param contractAccount
-	 *            合约账户
-	 * @param from
-	 *            从
-	 * @param to
-	 *            到
-	 * @param quantity
-	 *            币种金额
-	 * @param memo
-	 *            留言
+	 *
+	 * @param pk              私钥
+	 * @param contractAccount 合约账户
+	 * @param from            从
+	 * @param to              到
+	 * @param quantity        币种金额
+	 * @param memo            留言
 	 * @return
 	 * @throws Exception
 	 */
@@ -190,29 +178,23 @@ public class Rpc {
 		action.setData(data);
 		// reset expiration
 		tx.setExpiration(dateFormatter.format(new Date(1000 * Long.parseLong(tx.getExpiration().toString()))));
-		return pushTransaction("none", tx, new String[] { sign });
+		return pushTransaction("none", tx, new String[]{sign});
 	}
 
 	/**
 	 * 创建账户
-	 * 
-	 * @param pk
-	 *            私钥
-	 * @param creator
-	 *            创建者
-	 * @param newAccount
-	 *            新账户
-	 * @param owner
-	 *            公钥
-	 * @param active
-	 *            公钥
-	 * @param buyRam
-	 *            ram
+	 *
+	 * @param pk         私钥
+	 * @param creator    创建者
+	 * @param newAccount 新账户
+	 * @param owner      公钥
+	 * @param active     公钥
+	 * @param buyRam     ram
 	 * @return
 	 * @throws Exception
 	 */
 	public Transaction createAccount(String pk, String creator, String newAccount, String owner, String active,
-			Long buyRam) throws Exception {
+									 Long buyRam) throws Exception {
 		// get chain info
 		ChainInfo info = getChainInfo();
 		// get block info
@@ -253,35 +235,26 @@ public class Rpc {
 		buyAction.setData(ramData);
 		// reset expiration
 		tx.setExpiration(dateFormatter.format(new Date(1000 * Long.parseLong(tx.getExpiration().toString()))));
-		return pushTransaction("none", tx, new String[] { sign });
+		return pushTransaction("none", tx, new String[]{sign});
 	}
 
 	/**
 	 * 创建账户
-	 * 
-	 * @param pk
-	 *            私钥
-	 * @param creator
-	 *            创建者
-	 * @param newAccount
-	 *            新账户
-	 * @param owner
-	 *            公钥
-	 * @param active
-	 *            公钥
-	 * @param buyRam
-	 *            购买空间数量
-	 * @param stakeNetQuantity
-	 *            网络抵押
-	 * @param stakeCpuQuantity
-	 *            cpu抵押
-	 * @param transfer
-	 *            抵押资产是否转送给对方，0自己所有，1对方所有
+	 *
+	 * @param pk               私钥
+	 * @param creator          创建者
+	 * @param newAccount       新账户
+	 * @param owner            公钥
+	 * @param active           公钥
+	 * @param buyRam           购买空间数量
+	 * @param stakeNetQuantity 网络抵押
+	 * @param stakeCpuQuantity cpu抵押
+	 * @param transfer         抵押资产是否转送给对方，0自己所有，1对方所有
 	 * @return
 	 * @throws Exception
 	 */
 	public Transaction createAccount(String pk, String creator, String newAccount, String owner, String active,
-			Long buyRam, String stakeNetQuantity, String stakeCpuQuantity, Long transfer) throws Exception {
+									 Long buyRam, String stakeNetQuantity, String stakeCpuQuantity, Long transfer) throws Exception {
 		// get chain info
 		ChainInfo info = getChainInfo();
 		// info.setChainId("cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f");
@@ -339,11 +312,10 @@ public class Rpc {
 		delAction.setData(delData);
 		// reset expiration
 		tx.setExpiration(dateFormatter.format(new Date(1000 * Long.parseLong(tx.getExpiration().toString()))));
-		return pushTransaction("none", tx, new String[] { sign });
+		return pushTransaction("none", tx, new String[]{sign});
 	}
-	
+
 	/**
-	 * 
 	 * @param pk
 	 * @param voter
 	 * @param proxy
@@ -351,7 +323,7 @@ public class Rpc {
 	 * @return
 	 * @throws Exception
 	 */
-	public Transaction voteproducer(String pk,String voter,String proxy,List<String> producers) throws Exception {
+	public Transaction voteproducer(String pk, String voter, String proxy, List<String> producers) throws Exception {
 		Comparator<String> comparator = (h1, h2) -> h2.compareTo(h1);
 		producers.sort(comparator.reversed());
 		// get chain info
@@ -372,7 +344,7 @@ public class Rpc {
 		Map<String, Object> dataMap = new LinkedHashMap<>();
 		dataMap.put("voter", voter);
 		dataMap.put("proxy", proxy);
-		dataMap.put("producers",producers);
+		dataMap.put("producers", producers);
 		// action
 		TxAction action = new TxAction(voter, "eosio", "voteproducer", dataMap);
 		actions.add(action);
@@ -385,18 +357,19 @@ public class Rpc {
 		action.setData(data);
 		// reset expiration
 		tx.setExpiration(dateFormatter.format(new Date(1000 * Long.parseLong(tx.getExpiration().toString()))));
-		return pushTransaction("none", tx, new String[] { sign });
+		return pushTransaction("none", tx, new String[]{sign});
 	}
-	
+
 	/**
 	 * token close
+	 *
 	 * @param owner
 	 * @param symbol
 	 * @return
 	 * @throws Exception
 	 */
-	public Transaction close(String pk,String contract,String owner, String symbol)throws Exception {
-		ChainInfo info = getChainInfo();			
+	public Transaction close(String pk, String contract, String owner, String symbol) throws Exception {
+		ChainInfo info = getChainInfo();
 		Block block = getBlock(info.getLastIrreversibleBlockNum().toString());
 		Tx tx = new Tx();
 		tx.setExpiration(info.getHeadBlockTime().getTime() / 1000 + 60);
@@ -410,9 +383,9 @@ public class Rpc {
 		// data
 		Map<String, Object> dataMap = new LinkedHashMap<>();
 		dataMap.put("close-owner", owner);
-		dataMap.put("close-symbol",  new DataParam(symbol, DataType.symbol, Action.close).getValue());
+		dataMap.put("close-symbol", new DataParam(symbol, DataType.symbol, Action.close).getValue());
 		// action
-		TxAction action = new TxAction(owner,contract,"close",dataMap);
+		TxAction action = new TxAction(owner, contract, "close", dataMap);
 		actions.add(action);
 		tx.setActions(actions);
 		// sgin
@@ -423,6 +396,6 @@ public class Rpc {
 		action.setData(data);
 		// reset expiration
 		tx.setExpiration(dateFormatter.format(new Date(1000 * Long.parseLong(tx.getExpiration().toString()))));
-		return pushTransaction("none", tx, new String[] { sign });
+		return pushTransaction("none", tx, new String[]{sign});
 	}
 }
