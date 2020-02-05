@@ -2,7 +2,7 @@ package com.linkto.main.core;
 
 import android.util.Log;
 
-import com.linkto.main.util.SHA256;
+import com.linkto.main.util.Hash;
 import com.linkto.main.util.Util;
 
 import org.java_websocket.WebSocket;
@@ -193,7 +193,7 @@ public class Scatter {
 			dt = origin;
 		}
 
-		String msg = SHA256.hashToHex(dt) + SHA256.hashToHex(nonce);
+		String msg = Hash.sha256ToHex(dt) + Hash.sha256ToHex(nonce);
 		String result = Eos.sign(msg.getBytes(), mPrivateKey);
 
 		callback.onCallback(result);

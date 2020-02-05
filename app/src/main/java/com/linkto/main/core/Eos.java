@@ -20,7 +20,7 @@ public class Eos {
 		try {
 			return Ecc.privateToPublic(privateKey);
 		} catch (Exception e) {
-			Log.e(Util.TAG, "isValidPrivate", e);
+			Log.e(Util.TAG, "privateToPublic", e);
 			return null;
 		}
 	}
