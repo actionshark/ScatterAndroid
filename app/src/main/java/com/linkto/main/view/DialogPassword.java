@@ -41,7 +41,7 @@ public class DialogPassword extends Dialog {
 
 		WindowManager.LayoutParams lp = window.getAttributes();
 		lp.width = metrics.widthPixels * 8 / 10;
-		lp.height = metrics.heightPixels * 5 / 10;
+		lp.height = metrics.heightPixels * 4 / 10;
 		window.setAttributes(lp);
 
 		mEtPassword = findViewById(R.id.et_password);

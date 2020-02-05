@@ -1,9 +1,13 @@
 package com.linkto.main.core;
 
+import android.app.Activity;
 import android.util.Log;
 
+import com.linkto.main.activity.ActivityAccount;
 import com.linkto.main.util.Hash;
 import com.linkto.main.util.Util;
+import com.linkto.main.view.DialogSimple;
+import com.linkto.scatter.R;
 
 import org.java_websocket.WebSocket;
 import org.json.JSONArray;
@@ -66,6 +70,33 @@ public class Scatter {
 		Log.d(Util.TAG, "send: " + message);
 	}
 
+	private void showConfirmDialog(Object hint, Callback callback) {
+		Activity activity = ActivityAccount.getInstance();
+		activity.runOnUiThread(() -> {
+			DialogSimple dialog = new DialogSimple(activity);
+			dialog.setContent(hint);
+			dialog.setButton(R.string.cancel, R.string.confirm);
+			dialog.setOnClickListener((index) -> {
+				try {
+					if (index != 1) {
+						return;
+					}
+
+					if (callback != null) {
+						callback.onCallback(null);
+					}
+				} catch (Exception e) {
+					Log.e(Util.TAG, "confirm", e);
+				} finally {
+					Util.changeToBackground(activity);
+				}
+			});
+			dialog.show();
+
+			Util.changeToForeground(activity);
+		});
+	}
+
 	private void typePair(WebSocket webSocket, JSONObject data) {
 		send(webSocket, TYPE_PAIRED, null);
 	}
@@ -100,58 +131,62 @@ public class Scatter {
 		callback.onCallback(true);
 	}
 
-	private void apiGetOrRequestIdentity(JSONObject data, Callback callback) throws Exception {
-		String blockchain = null;
+	private void apiGetOrRequestIdentity(JSONObject data, Callback callback) {
+		showConfirmDialog(R.string.login_hint, (rst) -> {
+			String blockchain = null;
 
-		try {
-			blockchain = data.optJSONObject("payload").optJSONObject("fields")
-					.optJSONArray("accounts").optJSONObject(0)
-					.optString("blockchain");
-		} catch (Exception e) {
-			Log.e(Util.TAG, "Scatter.apiGetOrRequestIdentity", e);
-		}
+			try {
+				blockchain = data.optJSONObject("payload").optJSONObject("fields")
+						.optJSONArray("accounts").optJSONObject(0)
+						.optString("blockchain");
+			} catch (Exception e) {
+				Log.e(Util.TAG, "Scatter.apiGetOrRequestIdentity", e);
+			}
 
-		if (blockchain == null) {
-			blockchain = "eos";
-		}
+			if (blockchain == null) {
+				blockchain = "eos";
+			}
 
-		JSONObject account = new JSONObject();
-		account.put("name", mAccountName);
-		account.put("authority", "active");
-		account.put("blockchain", blockchain);
-		account.put("publicKey", mPublicKey);
+			JSONObject account = new JSONObject();
+			account.put("name", mAccountName);
+			account.put("authority", "active");
+			account.put("blockchain", blockchain);
+			account.put("publicKey", mPublicKey);
 
-		JSONArray accounts = new JSONArray();
-		accounts.put(account);
+			JSONArray accounts = new JSONArray();
+			accounts.put(account);
 
 
-		JSONObject id = new JSONObject();
-		id.put("name", mAccountName);
-		id.put("publicKey", mPublicKey);
-		id.put("accounts", accounts);
+			JSONObject id = new JSONObject();
+			id.put("name", mAccountName);
+			id.put("publicKey", mPublicKey);
+			id.put("accounts", accounts);
 
-		callback.onCallback(id);
+			callback.onCallback(id);
+		});
 	}
 
 	private void requestSignature(Object message, Callback callback) throws Exception {
-		byte[] bs;
+		showConfirmDialog(R.string.sign_hint, (rst) -> {
+			byte[] bs;
 
-		if (message instanceof String) {
-			bs = ((String) message).getBytes();
-		} else if (message instanceof JSONArray) {
-			JSONArray ja = (JSONArray) message;
-			bs = new byte[ja.length()];
-			for (int i = 0; i < bs.length; i++) {
-				bs[i] = (byte) ja.optInt(i);
+			if (message instanceof String) {
+				bs = ((String) message).getBytes();
+			} else if (message instanceof JSONArray) {
+				JSONArray ja = (JSONArray) message;
+				bs = new byte[ja.length()];
+				for (int i = 0; i < bs.length; i++) {
+					bs[i] = (byte) ja.optInt(i);
+				}
+			} else if (message instanceof byte[]) {
+				bs = (byte[]) message;
+			} else {
+				throw new IllegalArgumentException("illegal argument");
 			}
-		} else if (message instanceof byte[]) {
-			bs = (byte[]) message;
-		} else {
-			throw new IllegalArgumentException("illegal argument");
-		}
 
-		String sign = Eos.sign(bs, mPrivateKey);
-		callback.onCallback(sign);
+			String sign = Eos.sign(bs, mPrivateKey);
+			callback.onCallback(sign);
+		});
 	}
 
 	private void apiRequestSignature(JSONObject data, Callback callback) throws Exception {

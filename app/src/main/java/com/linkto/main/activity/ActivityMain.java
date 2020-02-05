@@ -18,8 +18,6 @@ public class ActivityMain extends Activity {
 
 		setContentView(R.layout.activity_main);
 
-		Util.init(this);
-
 		boolean hasKey = Storage.contains(Util.PRIVATE_KEY_CIPHER);
 		Intent intent = new Intent();
 

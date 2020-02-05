@@ -16,7 +16,6 @@
     <string name="cancel">取消</string>
 
     <string name="import_account_success">导入账号成功</string>
-    <string name="delete_account_success">删除账号成功</string>
     <string name="not_valid_private">非法私钥</string>
     <string name="password_error">密码错误</string>
     <string name="password_length_error">密码长度%1$d-%2$d</string>
@@ -28,5 +27,11 @@
     <string name="close">关闭</string>
     <string name="delete">删除</string>
 
+    <string name="delete_account_hint">确定要删除账号吗？</string>
+    <string name="delete_account_success">删除账号成功</string>
+
     <string name="account_info">余额：%1$s\ncpu：%2$d/%3$d\nnet：%4$d/%5$d</string>
+
+    <string name="login_hint">是否授权登录？</string>
+    <string name="sign_hint">是否授权签名？</string>
 </resources>

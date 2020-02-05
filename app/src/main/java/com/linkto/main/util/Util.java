@@ -1,9 +1,14 @@
 package com.linkto.main.util;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 
+import com.linkto.main.activity.ActivityAccount;
 import com.linkto.main.core.Eos;
 import com.linkto.main.core.Server;
+
+import java.util.List;
 
 public class Util {
 	public static final String TAG = "ScatterLog";
@@ -67,5 +72,20 @@ public class Util {
 		}
 
 		return bs;
+	}
+
+	public static void changeToForeground(Context context) {
+		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningTaskInfo> taskList = am.getRunningTasks(100);
+		for (ActivityManager.RunningTaskInfo rti : taskList) {
+			if (rti.topActivity.getPackageName().equals(context.getPackageName())) {
+				am.moveTaskToFront(rti.id, 0);
+				break;
+			}
+		}
+	}
+
+	public static void changeToBackground(Activity activity) {
+		activity.moveTaskToBack(true);
 	}
 }

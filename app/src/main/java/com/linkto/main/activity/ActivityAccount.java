@@ -14,11 +14,17 @@ import com.linkto.main.util.Encryption;
 import com.linkto.main.core.Eos;
 import com.linkto.main.util.Storage;
 import com.linkto.main.view.DialogPassword;
+import com.linkto.main.view.DialogSimple;
 import com.linkto.scatter.R;
 
 import org.json.JSONObject;
 
 public class ActivityAccount extends Activity {
+	private static ActivityAccount sInstance;
+	public static ActivityAccount getInstance() {
+		return sInstance;
+	}
+
 	private TextView mTvName;
 	private Button mBtnOpen;
 	private TextView mTvInfo;
@@ -28,6 +34,8 @@ public class ActivityAccount extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		sInstance = this;
 
 		setContentView(R.layout.activity_account);
 
@@ -44,10 +52,18 @@ public class ActivityAccount extends Activity {
 		});
 
 		findViewById(R.id.btn_delete).setOnClickListener((view) -> {
-			Storage.remove(Util.PRIVATE_KEY_CIPHER);
-			Toast.makeText(ActivityAccount.this, R.string.delete_account_success,
-					Toast.LENGTH_SHORT).show();
-			backToMain();
+			DialogSimple dialogSimple = new DialogSimple(this);
+			dialogSimple.setContent(R.string.delete_account_hint);
+			dialogSimple.setButton(R.string.delete, R.string.cancel);
+			dialogSimple.setOnClickListener((index) -> {
+				if (index == 0) {
+					Storage.remove(Util.PRIVATE_KEY_CIPHER);
+					Toast.makeText(ActivityAccount.this, R.string.delete_account_success,
+							Toast.LENGTH_SHORT).show();
+					backToMain();
+				}
+			});
+			dialogSimple.show();
 		});
 
 		mTvInfo = findViewById(R.id.tv_info);
