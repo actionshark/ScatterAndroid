@@ -3,13 +3,17 @@ package com.linkto.main.core;
 import android.util.Log;
 
 import com.linkto.main.util.Util;
-import com.linkto.main.util.HttpUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import io.eblock.eos4j.Ecc;
 import io.eblock.eos4j.ecc.EccTool;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Eos {
 	public static String privateToPublic(String privateKey) {
@@ -32,21 +36,23 @@ public class Eos {
 
 	public static String getKeyAccounts(String publicKey) {
 		try {
-			HttpUtil.Params params = new HttpUtil.Params();
-			params.url = "https://mainnet.eosn.io/v2/state/get_key_accounts";
-			params.method = "POST";
-			params.headers.put("Content-Type", "application/json");
-
 			JSONObject data = new JSONObject();
 			data.put("public_key", publicKey);
-			params.data = data.toString();
 
-			HttpUtil.Result result = HttpUtil.request(params);
-			if (result.code != 200) {
+			MediaType mediaType = MediaType.parse("application/json");
+			RequestBody body = RequestBody.create(mediaType, data.toString());
+			Request request = new Request.Builder()
+					.url("https://mainnet.eosn.io/v2/state/get_key_accounts")
+					.post(body)
+					.build();
+
+			Response response = new OkHttpClient().newCall(request).execute();
+
+			if (!response.isSuccessful() || response.code() != 200) {
 				return null;
 			}
 
-			JSONObject res = new JSONObject(result.content);
+			JSONObject res = new JSONObject(response.body().string());
 			JSONArray accounts = res.optJSONArray("account_names");
 			if (accounts.length() > 0) {
 				return accounts.getString(0);
@@ -61,26 +67,25 @@ public class Eos {
 
 	public static JSONObject getAccount(String accountName) {
 		try {
-			HttpUtil.Params params = new HttpUtil.Params();
-			params.url = "https://nodes.get-scatter.com/v1/chain/get_account";
-			params.method = "POST";
-			params.headers.put("Content-Type", "application/json");
-
 			JSONObject data = new JSONObject();
 			data.put("account_name", accountName);
-			params.data = data.toString();
 
-			HttpUtil.Result result = HttpUtil.request(params);
+			MediaType mediaType = MediaType.parse("application/json");
+			RequestBody body = RequestBody.create(mediaType, data.toString());
+			Request request = new Request.Builder()
+					.url("https://nodes.get-scatter.com/v1/chain/get_account")
+					.post(body)
+					.build();
 
-			Log.d(Util.TAG, "info: " + result.code + " " + result.content);
+			Response response = new OkHttpClient().newCall(request).execute();
 
-			if (result.code != 200) {
+			if (!response.isSuccessful() || response.code() != 200) {
 				return null;
 			}
 
-			return new JSONObject(result.content);
+			return new JSONObject(response.body().string());
 		} catch (Exception e) {
-			Log.e(Util.TAG, "getKeyAccounts", e);
+			Log.e(Util.TAG, "getAccount", e);
 			return null;
 		}
 	}
