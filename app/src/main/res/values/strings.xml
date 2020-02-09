@@ -30,7 +30,7 @@
     <string name="delete_account_hint">确定要删除账号吗？</string>
     <string name="delete_account_success">删除账号成功</string>
 
-    <string name="account_info">余额：%1$s\ncpu：%2$d/%3$d\nnet：%4$d/%5$d</string>
+    <string name="account_info">余额：%1$s\nram：%2$d/%3$d\ncpu：%4$d/%5$d\nnet：%6$d/%7$d</string>
 
     <string name="wait_server">等待服务器</string>
     <string name="login_hint">是否授权登录？</string>

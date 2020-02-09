@@ -160,22 +160,31 @@ public class ActivityAccount extends ActivityBase {
 				try {
 					String balance = info.optString("core_liquid_balance");
 
+					int ramTotal = info.optInt("ram_quota");
+					int ramLeft = ramTotal - info.optInt("ram_usage");
+					if (ramLeft < 0) {
+						ramLeft = 0;
+					}
+
 					JSONObject cpu = info.optJSONObject("cpu_limit");
-					int cpuAvailable = cpu.optInt("available");
-					int cpuUsed = cpu.optInt("used");
-					if (cpuUsed > cpuAvailable) {
-						cpuUsed = cpuAvailable;
+					int cpuTotal = cpu.optInt("available");
+					int cpuLeft = cpuTotal - cpu.optInt("used");
+					if (cpuLeft < 0) {
+						cpuLeft = 0;
 					}
 
 					JSONObject net = info.optJSONObject("net_limit");
-					int netAvailable = net.optInt("available");
-					int netUsed = net.optInt("used");
-					if (netUsed > netAvailable) {
-						netUsed = netAvailable;
+					int netTotal = net.optInt("available");
+					int netLeft = netTotal - net.optInt("used");
+					if (netLeft < 0) {
+						netLeft = 0;
 					}
 
 					mTvInfo.setText(getString(R.string.account_info,
-							balance, cpuUsed, cpuAvailable, netUsed, netAvailable));
+							balance,
+							ramLeft, ramTotal,
+							cpuLeft, cpuTotal,
+							netLeft, netTotal));
 				} catch (Exception e) {
 					Log.e(Util.TAG, "updateInfo", e);
 				}
