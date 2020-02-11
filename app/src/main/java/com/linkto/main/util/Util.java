@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 
-import com.linkto.main.activity.ActivityAccount;
-import com.linkto.main.core.Eos;
 import com.linkto.main.core.Server;
 
 import java.util.List;

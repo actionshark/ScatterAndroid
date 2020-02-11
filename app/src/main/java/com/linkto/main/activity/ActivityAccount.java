@@ -9,11 +9,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.linkto.main.core.Server;
-import com.linkto.main.util.Util;
-import com.linkto.main.util.Encryption;
 import com.linkto.main.core.Eos;
+import com.linkto.main.core.Server;
+import com.linkto.main.util.Encryption;
+import com.linkto.main.util.NotificationUtil;
 import com.linkto.main.util.Storage;
+import com.linkto.main.util.Util;
 import com.linkto.main.view.DialogPassword;
 import com.linkto.main.view.DialogSimple;
 import com.linkto.scatter.R;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 
 public class ActivityAccount extends ActivityBase {
 	private static ActivityAccount sInstance;
+
 	public static ActivityAccount getInstance() {
 		return sInstance;
 	}
@@ -131,6 +133,8 @@ public class ActivityAccount extends ActivityBase {
 					mBtnOpen.setText(R.string.close);
 
 					updateInfo();
+
+					NotificationUtil.showNotification(ActivityAccount.this, 0);
 				});
 			}).start();
 		});
@@ -144,6 +148,8 @@ public class ActivityAccount extends ActivityBase {
 		mTvName.setText(R.string.unopened);
 		mBtnOpen.setText(R.string.open);
 		mTvInfo.setText("");
+
+		NotificationUtil.cancelNotification(ActivityAccount.this);
 	}
 
 	private void backToMain() {

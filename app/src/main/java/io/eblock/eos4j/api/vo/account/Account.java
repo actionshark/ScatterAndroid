@@ -1,10 +1,10 @@
 package io.eblock.eos4j.api.vo.account;
 
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author espritblock http://eblock.io

@@ -1,8 +1,6 @@
 package io.eblock.eos4j;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import io.eblock.eos4j.api.exception.ApiException;

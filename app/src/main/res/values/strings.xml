@@ -35,4 +35,8 @@
     <string name="wait_server">等待服务器</string>
     <string name="login_hint">是否授权登录？</string>
     <string name="sign_hint">是否授权签名？</string>
+
+    <string name="notification_title">Scatter后台服务中</string>
+    <string name="notification_empty">暂无请求</string>
+    <string name="notification_request">有请求！</string>
 </resources>

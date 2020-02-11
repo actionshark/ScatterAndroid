@@ -1,15 +1,14 @@
 package com.linkto.main.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.linkto.main.util.Util;
-import com.linkto.main.util.Encryption;
 import com.linkto.main.core.Eos;
+import com.linkto.main.util.Encryption;
 import com.linkto.main.util.Storage;
+import com.linkto.main.util.Util;
 import com.linkto.scatter.R;
 
 public class ActivityEditKey extends ActivityBase {

@@ -3,8 +3,8 @@ package io.eblock.eos4j.api.service;
 import java.util.Map;
 
 import io.eblock.eos4j.api.vo.Block;
-import io.eblock.eos4j.api.vo.TableRows;
 import io.eblock.eos4j.api.vo.ChainInfo;
+import io.eblock.eos4j.api.vo.TableRows;
 import io.eblock.eos4j.api.vo.TableRowsReq;
 import io.eblock.eos4j.api.vo.account.Account;
 import io.eblock.eos4j.api.vo.transaction.Transaction;
