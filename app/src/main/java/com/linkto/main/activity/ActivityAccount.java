@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.linkto.main.core.Eos;
 import com.linkto.main.core.Server;
 import com.linkto.main.util.Encryption;
-import com.linkto.main.util.NotificationUtil;
 import com.linkto.main.util.Storage;
 import com.linkto.main.util.Util;
 import com.linkto.main.view.DialogPassword;
@@ -134,7 +133,7 @@ public class ActivityAccount extends ActivityBase {
 
 					updateInfo();
 
-					NotificationUtil.showNotification(ActivityAccount.this, 0);
+					ForegroundService.showService(ActivityAccount.this, 0);
 				});
 			}).start();
 		});
@@ -149,7 +148,7 @@ public class ActivityAccount extends ActivityBase {
 		mBtnOpen.setText(R.string.open);
 		mTvInfo.setText("");
 
-		NotificationUtil.cancelNotification(ActivityAccount.this);
+		ForegroundService.cancelSerice(this);
 	}
 
 	private void backToMain() {

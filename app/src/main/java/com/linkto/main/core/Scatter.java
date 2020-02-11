@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.linkto.main.activity.ActivityAccount;
+import com.linkto.main.activity.ForegroundService;
 import com.linkto.main.util.Hash;
+import com.linkto.main.util.NotificationUtil;
 import com.linkto.main.util.Util;
 import com.linkto.main.view.DialogSimple;
 import com.linkto.scatter.R;
@@ -27,6 +29,16 @@ public class Scatter {
 
 	private interface Callback {
 		void onCallback(Object result) throws Exception;
+	}
+
+
+	private static int sRequestCount = 0;
+	private static synchronized int modifyRequestCount(int delta) {
+		sRequestCount += delta;
+		return sRequestCount;
+	}
+	private static synchronized int getRequestCount() {
+		return sRequestCount;
 	}
 
 	private String mAccountName;
@@ -92,6 +104,17 @@ public class Scatter {
 					Util.changeToBackground(activity);
 				}
 			});
+
+			dialog.setOnShowListener((dlg) -> {
+				int count = modifyRequestCount(1);
+				ForegroundService.showService(activity, count);
+			});
+
+			dialog.setOnDismissListener((dlg) -> {
+				int count = modifyRequestCount(-1);
+				ForegroundService.showService(activity, count);
+			});
+
 			dialog.show();
 		});
 

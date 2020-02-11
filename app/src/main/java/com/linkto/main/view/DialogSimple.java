@@ -10,21 +10,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.linkto.main.util.NotificationUtil;
 import com.linkto.scatter.R;
 
 public class DialogSimple extends Dialog {
-	private static int sCount = 0;
-
-	public static synchronized int modifyCount(int delta) {
-		sCount += delta;
-		return sCount;
-	}
-
-	public static synchronized int getCount() {
-		return sCount;
-	}
-
 	public interface OnClickListener {
 		void onClick(int index);
 	}
@@ -76,16 +64,6 @@ public class DialogSimple extends Dialog {
 
 		setCancelable(false);
 		setCanceledOnTouchOutside(false);
-
-		setOnShowListener((dialog) -> {
-			int count = modifyCount(1);
-			NotificationUtil.showNotification(getContext(), count);
-		});
-
-		setOnDismissListener((dialog) -> {
-			int count = modifyCount(-1);
-			NotificationUtil.showNotification(getContext(), count);
-		});
 	}
 
 	public void setContent(Object resId) {
