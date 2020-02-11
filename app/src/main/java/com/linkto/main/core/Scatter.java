@@ -6,7 +6,6 @@ import android.util.Log;
 import com.linkto.main.activity.ActivityAccount;
 import com.linkto.main.activity.ForegroundService;
 import com.linkto.main.util.Hash;
-import com.linkto.main.util.NotificationUtil;
 import com.linkto.main.util.Util;
 import com.linkto.main.view.DialogSimple;
 import com.linkto.scatter.R;
@@ -33,10 +32,12 @@ public class Scatter {
 
 
 	private static int sRequestCount = 0;
+
 	private static synchronized int modifyRequestCount(int delta) {
 		sRequestCount += delta;
 		return sRequestCount;
 	}
+
 	private static synchronized int getRequestCount() {
 		return sRequestCount;
 	}

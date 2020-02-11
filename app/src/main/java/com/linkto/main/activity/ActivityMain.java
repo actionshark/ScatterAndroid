@@ -13,11 +13,6 @@ public class ActivityMain extends ActivityBase {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
 
 		boolean hasKey = Storage.contains(Util.PRIVATE_KEY_CIPHER);
 		Intent intent = new Intent();
@@ -29,5 +24,6 @@ public class ActivityMain extends ActivityBase {
 		}
 
 		startActivity(intent);
+		finish();
 	}
 }

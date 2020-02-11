@@ -11,14 +11,12 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import com.linkto.main.activity.ActivityMain;
-import com.linkto.main.activity.ForegroundService;
-import com.linkto.main.view.DialogSimple;
 import com.linkto.scatter.R;
 
 public class NotificationUtil {
 	private static final int ID = 1;
 
-	public static void showNotification(Service context, int count) {
+	public static void showNotification(Context context, int count) {
 		NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		Notification.Builder builder;
 
@@ -48,8 +46,11 @@ public class NotificationUtil {
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.build();
 
-		// nm.notify(ID, nt);
-		context.startForeground(ID, nt);
+		if (context instanceof Service) {
+			((Service) context).startForeground(ID, nt);
+		} else {
+			   nm.notify(ID, nt);
+		}
 	}
 
 	public static void cancelNotification(Context context) {

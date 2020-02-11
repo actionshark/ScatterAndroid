@@ -73,7 +73,7 @@ public class Server {
 
 				new Thread(() -> {
 					try {
-						Thread.sleep(3000);
+						Thread.sleep(1500);
 					} catch (Exception ex) {
 						Log.e(Util.TAG, "sleep", ex);
 					}

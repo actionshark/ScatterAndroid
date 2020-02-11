@@ -22,7 +22,7 @@ public class ForegroundService extends Service {
 		}
 	}
 
-	public static void cancelSerice(Context context) {
+	public static void cancelService(Context context) {
 		Intent intent = new Intent(context, ForegroundService.class);
 		context.stopService(intent);
 

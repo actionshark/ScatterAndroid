@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -148,7 +149,7 @@ public class ActivityAccount extends ActivityBase {
 		mBtnOpen.setText(R.string.open);
 		mTvInfo.setText("");
 
-		ForegroundService.cancelSerice(this);
+		ForegroundService.cancelService(this);
 	}
 
 	private void backToMain() {
@@ -195,5 +196,15 @@ public class ActivityAccount extends ActivityBase {
 				}
 			});
 		}).start();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			Util.changeToBackground(this);
+			return true;
+		}
+
+		return super.onKeyDown(keyCode, event);
 	}
 }
