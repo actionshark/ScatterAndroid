@@ -92,6 +92,7 @@ public class Server {
 			}
 		};
 
+		sWebSocketServer.setReuseAddr(true);
 		sWebSocketServer.start();
 	}
 }
