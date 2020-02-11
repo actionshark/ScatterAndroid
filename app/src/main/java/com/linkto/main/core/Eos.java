@@ -89,4 +89,31 @@ public class Eos {
 			return null;
 		}
 	}
+
+	public static JSONObject abiBinToJson(String code, String action, String args) {
+		try {
+			JSONObject data = new JSONObject();
+			data.put("code", code);
+			data.put("action", action);
+			data.put("binargs", args);
+
+			MediaType mediaType = MediaType.parse("application/json");
+			RequestBody body = RequestBody.create(mediaType, data.toString());
+			Request request = new Request.Builder()
+					.url("https://nodes.get-scatter.com/v1/chain/abi_bin_to_json")
+					.post(body)
+					.build();
+
+			Response response = new OkHttpClient().newCall(request).execute();
+
+			if (!response.isSuccessful() || response.code() != 200) {
+				return null;
+			}
+
+			return new JSONObject(response.body().string());
+		} catch (Exception e) {
+			Log.e(Util.TAG, "abiBinToJson", e);
+			return null;
+		}
+	}
 }

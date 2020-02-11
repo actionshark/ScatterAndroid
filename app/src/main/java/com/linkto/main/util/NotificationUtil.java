@@ -49,7 +49,7 @@ public class NotificationUtil {
 		if (context instanceof Service) {
 			((Service) context).startForeground(ID, nt);
 		} else {
-			   nm.notify(ID, nt);
+			nm.notify(ID, nt);
 		}
 	}
 

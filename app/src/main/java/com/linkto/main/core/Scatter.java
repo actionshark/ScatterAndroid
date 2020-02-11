@@ -2,6 +2,7 @@ package com.linkto.main.core;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.Gravity;
 
 import com.linkto.main.activity.ActivityAccount;
 import com.linkto.main.activity.ForegroundService;
@@ -15,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Scatter {
 	private static final String PREFIX_CONNECT = "40/scatter";
@@ -25,6 +28,14 @@ public class Scatter {
 	private static final String TYPE_REKEY = "rekey";
 	private static final String TYPE_API = "api";
 	private static final String TYPE_EVENT = "event";
+
+	private static class Action {
+		public String account;
+		public String name;
+
+		public String bin;
+		public JSONObject json;
+	}
 
 	private interface Callback {
 		void onCallback(Object result) throws Exception;
@@ -83,7 +94,7 @@ public class Scatter {
 		Log.d(Util.TAG, "send: " + message);
 	}
 
-	private void showConfirmDialog(Object hint, Callback callback) {
+	private void showConfirmDialog(Object hint, int gravity, Callback callback) {
 		if (mAccountName == null) {
 			return;
 		}
@@ -93,6 +104,7 @@ public class Scatter {
 		activity.runOnUiThread(() -> {
 			DialogSimple dialog = new DialogSimple(activity);
 			dialog.setContent(hint);
+			dialog.setContentGravity(gravity);
 			dialog.setButton(R.string.cancel, R.string.confirm);
 			dialog.setOnClickListener((index) -> {
 				try {
@@ -157,7 +169,7 @@ public class Scatter {
 	}
 
 	private void apiGetOrRequestIdentity(JSONObject data, Callback callback) {
-		showConfirmDialog(R.string.login_hint, (confirm) -> {
+		showConfirmDialog(R.string.login_hint, Gravity.CENTER, (confirm) -> {
 			if (!(boolean) confirm) {
 				callback.onCallback(false);
 				return;
@@ -196,8 +208,24 @@ public class Scatter {
 		});
 	}
 
-	private void requestSignature(Object message, Callback callback) throws Exception {
-		showConfirmDialog(R.string.sign_hint, (confirm) -> {
+	private void requestSignature(Object data, List<Action> actions, Callback callback) {
+		Object hint = R.string.sign_hint;
+		int gravity = Gravity.CENTER;
+
+		if (actions != null && actions.size() > 0) {
+			StringBuilder sb = new StringBuilder();
+			for (Action action : actions) {
+				sb.append("account: ").append(action.account).append('\n')
+						.append("name: ").append(action.name).append('\n')
+						.append("data: ").append(action.json != null ? action.json : action.bin)
+						.append("\n\n");
+			}
+
+			hint = sb.toString();
+			gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+		}
+
+		showConfirmDialog(hint, gravity, (confirm) -> {
 			if (!(boolean) confirm) {
 				callback.onCallback(false);
 				return;
@@ -205,16 +233,16 @@ public class Scatter {
 
 			byte[] bs;
 
-			if (message instanceof String) {
-				bs = ((String) message).getBytes();
-			} else if (message instanceof JSONArray) {
-				JSONArray ja = (JSONArray) message;
+			if (data instanceof String) {
+				bs = ((String) data).getBytes();
+			} else if (data instanceof JSONArray) {
+				JSONArray ja = (JSONArray) data;
 				bs = new byte[ja.length()];
 				for (int i = 0; i < bs.length; i++) {
 					bs[i] = (byte) ja.optInt(i);
 				}
-			} else if (message instanceof byte[]) {
-				bs = (byte[]) message;
+			} else if (data instanceof byte[]) {
+				bs = (byte[]) data;
 			} else {
 				throw new IllegalArgumentException("illegal argument");
 			}
@@ -224,11 +252,35 @@ public class Scatter {
 		});
 	}
 
-	private void apiRequestSignature(JSONObject data, Callback callback) throws Exception {
+	private void apiRequestSignature(JSONObject data, Callback callback) {
 		JSONObject payload = data.optJSONObject("payload");
 		Object buf = payload.optJSONObject("buf").opt("data");
 
-		requestSignature(buf, (result) -> {
+		List<Action> actions = new ArrayList<>();
+
+		try {
+			JSONArray acts = payload.optJSONObject("transaction").optJSONArray("actions");
+
+			for (int i = 0; i < acts.length(); i++) {
+				JSONObject act = acts.optJSONObject(i);
+
+				Action action = new Action();
+				action.account = act.optString("account");
+				action.name = act.optString("name");
+				action.bin = act.optString("data");
+
+				JSONObject result = Eos.abiBinToJson(action.account, action.name, action.bin);
+				if (result != null) {
+					action.json = result.optJSONObject("args");
+				}
+
+				actions.add(action);
+			}
+		} catch (Exception e) {
+			Log.e(Util.TAG, "get transaction", e);
+		}
+
+		requestSignature(buf, actions, (result) -> {
 			if (result != null) {
 				JSONObject ret = new JSONObject();
 				ret.put("signatures", result);
@@ -241,10 +293,10 @@ public class Scatter {
 		});
 	}
 
-	private void apiRequestArbitrarySignature(JSONObject data, Callback callback) throws Exception {
+	private void apiRequestArbitrarySignature(JSONObject data, Callback callback) {
 		Object message = data.optJSONObject("payload").opt("data");
 
-		requestSignature(message, (result) -> {
+		requestSignature(message, null, (result) -> {
 			if (result != null) {
 				callback.onCallback(result);
 			} else {

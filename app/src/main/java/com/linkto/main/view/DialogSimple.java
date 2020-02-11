@@ -76,6 +76,11 @@ public class DialogSimple extends Dialog {
 		}
 	}
 
+	public void setContentGravity(int gravity) {
+		TextView tv = findViewById(R.id.tv_content);
+		tv.setGravity(gravity);
+	}
+
 	public void setButton(Object... texts) {
 		for (int i = 0; i < texts.length; i++) {
 			int id = getContext().getResources().getIdentifier("btn_" + i, "id",
