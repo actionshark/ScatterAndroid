@@ -24,7 +24,7 @@ public class NotificationUtil {
 			String id = context.getPackageName();
 			String name = context.getString(R.string.app_name);
 
-			NotificationChannel channel = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH);
+			NotificationChannel channel = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_LOW);
 			nm.createNotificationChannel(channel);
 
 			builder = new Notification.Builder(context, id);
@@ -43,7 +43,7 @@ public class NotificationUtil {
 				.setContentIntent(pendingIntent)
 				.setAutoCancel(false)
 				.setOngoing(true)
-				.setVisibility(Notification.VISIBILITY_PUBLIC)
+				.setVisibility(Notification.VISIBILITY_PRIVATE)
 				.build();
 
 		if (context instanceof Service) {

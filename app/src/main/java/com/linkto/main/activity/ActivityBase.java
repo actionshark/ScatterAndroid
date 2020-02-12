@@ -27,7 +27,7 @@ public abstract class ActivityBase extends Activity {
 
 		synchronized (sActivities) {
 			if (sActivities.size() > 0) {
-				activity = sActivities.get(0);
+				activity = sActivities.get(sActivities.size() - 1);
 			} else {
 				activity = null;
 			}
