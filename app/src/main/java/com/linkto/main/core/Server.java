@@ -18,7 +18,11 @@ public class Server {
 
 	private static Scatter sScatter;
 
-	public static void init() {
+	public static synchronized void init() {
+		if (sScatter != null) {
+			return;
+		}
+
 		sScatter = new Scatter();
 
 		start();

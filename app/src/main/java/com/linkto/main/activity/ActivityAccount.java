@@ -1,17 +1,19 @@
 package com.linkto.main.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.linkto.main.core.AccountInfo;
 import com.linkto.main.core.Eos;
 import com.linkto.main.core.Server;
+import com.linkto.main.util.App;
 import com.linkto.main.util.Encryption;
 import com.linkto.main.util.Storage;
 import com.linkto.main.util.Util;
@@ -21,57 +23,53 @@ import com.linkto.scatter.R;
 
 import org.json.JSONObject;
 
-public class ActivityAccount extends ActivityBase {
-	private static ActivityAccount sInstance;
+import java.util.LinkedList;
+import java.util.Queue;
 
-	public static ActivityAccount getInstance() {
-		return sInstance;
+public class ActivityAccount extends ActivityBase {
+	public interface Task {
+		void onTask(Activity activity) throws Exception;
+	}
+
+	private static final Queue<Task> sTasks = new LinkedList<>();
+
+	public static void post(Task task) {
+		synchronized (sTasks) {
+			sTasks.offer(task);
+		}
+
+		Context context = App.getInstance();
+
+		Intent intent = new Intent();
+		intent.setClass(context, ActivityAccount.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(intent);
 	}
 
 	private TextView mTvName;
 	private Button mBtnOpen;
 	private TextView mTvInfo;
 
-	private String mName;
-
-	private Handler mHandler;
-	private Runnable mServerCheck = new Runnable() {
-		@Override
-		public void run() {
-			if (Server.isRunning()) {
-				mBtnOpen.setText(mName == null ? R.string.open : R.string.close);
-				return;
-			}
-
-			mHandler.postDelayed(mServerCheck, 200);
-		}
-	};
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		sInstance = this;
-
 		setContentView(R.layout.activity_account);
+
+		AccountInfo ai = Server.getScatter().getAccountInfo();
 
 		mTvName = findViewById(R.id.tv_name);
 		mTvName.setOnClickListener((view) -> updateInfo());
 
 		mBtnOpen = findViewById(R.id.btn_open);
-		mBtnOpen.setText(R.string.wait_server);
+		mBtnOpen.setText(ai.enabled ? R.string.close : R.string.open);
 		mBtnOpen.setOnClickListener((view) -> {
-			if (!Server.isRunning()) {
-				Toast.makeText(this, R.string.wait_server, Toast.LENGTH_SHORT).show();
-			} else if (mName == null) {
-				open();
-			} else {
+			if (ai.enabled) {
 				close();
+			} else {
+				open();
 			}
 		});
-
-		mHandler = new Handler(Looper.getMainLooper());
-		mHandler.post(mServerCheck);
 
 		findViewById(R.id.btn_delete).setOnClickListener((view) -> {
 			DialogSimple dialogSimple = new DialogSimple(this);
@@ -80,6 +78,8 @@ public class ActivityAccount extends ActivityBase {
 			dialogSimple.setOnClickListener((index) -> {
 				if (index == 0) {
 					Storage.remove(Util.PRIVATE_KEY_CIPHER);
+					ai.enabled = false;
+
 					Toast.makeText(ActivityAccount.this, R.string.delete_account_success,
 							Toast.LENGTH_SHORT).show();
 					backToMain();
@@ -89,6 +89,35 @@ public class ActivityAccount extends ActivityBase {
 		});
 
 		mTvInfo = findViewById(R.id.tv_info);
+
+		if (ai.enabled) {
+			mTvName.setText(ai.name);
+			updateInfo();
+		}
+
+		onNewIntent(getIntent());
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
+		while (true) {
+			Task task;
+			synchronized (sTasks) {
+				task = sTasks.poll();
+			}
+
+			if (task == null) {
+				break;
+			}
+
+			try {
+				task.onTask(this);
+			} catch (Exception e) {
+				Log.e(Util.TAG, "onTask", e);
+			}
+		}
 	}
 
 	private void open() {
@@ -116,20 +145,25 @@ public class ActivityAccount extends ActivityBase {
 			}
 
 			new Thread(() -> {
-				String name = Eos.getKeyAccounts(publicKey);
+				AccountInfo ai = Server.getScatter().getAccountInfo();
+				ai.privateKey = privateKey;
+
+				if (!publicKey.equals(ai.publicKey) || ai.name == null) {
+					ai.publicKey = publicKey;
+					ai.name = Eos.getKeyAccounts(publicKey);
+				}
 
 				runOnUiThread(() -> {
-					if (name == null) {
+					if (ai.name == null) {
 						Toast.makeText(ActivityAccount.this, R.string.account_not_exist,
 								Toast.LENGTH_SHORT).show();
 						backToMain();
 						return;
 					}
 
-					mName = name;
-					Server.getScatter().setInfo(name, privateKey, publicKey);
+					ai.enabled = true;
 
-					mTvName.setText(name);
+					mTvName.setText(ai.name);
 					mBtnOpen.setText(R.string.close);
 
 					updateInfo();
@@ -142,8 +176,8 @@ public class ActivityAccount extends ActivityBase {
 	}
 
 	private void close() {
-		mName = null;
-		Server.getScatter().setInfo(null, null, null);
+		AccountInfo ai = Server.getScatter().getAccountInfo();
+		ai.enabled = false;
 
 		mTvName.setText(R.string.unopened);
 		mBtnOpen.setText(R.string.open);
@@ -161,36 +195,37 @@ public class ActivityAccount extends ActivityBase {
 
 	private void updateInfo() {
 		new Thread(() -> {
-			JSONObject info = Eos.getAccount(mName);
+			AccountInfo ai = Server.getScatter().getAccountInfo();
+			JSONObject info = Eos.getAccount(ai.name);
 			runOnUiThread(() -> {
 				try {
-					String balance = info.optString("core_liquid_balance");
+					ai.balance = info.optString("core_liquid_balance");
 
-					int ramTotal = info.optInt("ram_quota");
-					int ramLeft = ramTotal - info.optInt("ram_usage");
-					if (ramLeft < 0) {
-						ramLeft = 0;
+					ai.ram.total = info.optInt("ram_quota");
+					ai.ram.left = ai.ram.total - info.optInt("ram_usage");
+					if (ai.ram.left < 0) {
+						ai.ram.left = 0;
 					}
 
 					JSONObject cpu = info.optJSONObject("cpu_limit");
-					int cpuTotal = cpu.optInt("available");
-					int cpuLeft = cpuTotal - cpu.optInt("used");
-					if (cpuLeft < 0) {
-						cpuLeft = 0;
+					ai.cpu.total = cpu.optInt("available");
+					ai.cpu.left = ai.cpu.total - cpu.optInt("used");
+					if (ai.cpu.left < 0) {
+						ai.cpu.left = 0;
 					}
 
 					JSONObject net = info.optJSONObject("net_limit");
-					int netTotal = net.optInt("available");
-					int netLeft = netTotal - net.optInt("used");
-					if (netLeft < 0) {
-						netLeft = 0;
+					ai.net.total = net.optInt("available");
+					ai.net.left = ai.net.total - net.optInt("used");
+					if (ai.net.left < 0) {
+						ai.net.left = 0;
 					}
 
 					mTvInfo.setText(getString(R.string.account_info,
-							balance,
-							ramLeft, ramTotal,
-							cpuLeft, cpuTotal,
-							netLeft, netTotal));
+							ai.balance,
+							ai.ram.left, ai.ram.total,
+							ai.cpu.left, ai.cpu.total,
+							ai.net.left, ai.net.total));
 				} catch (Exception e) {
 					Log.e(Util.TAG, "updateInfo", e);
 				}

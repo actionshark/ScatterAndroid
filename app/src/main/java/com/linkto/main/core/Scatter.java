@@ -1,6 +1,5 @@
 package com.linkto.main.core;
 
-import android.app.Activity;
 import android.util.Log;
 import android.view.Gravity;
 
@@ -29,14 +28,6 @@ public class Scatter {
 	private static final String TYPE_API = "api";
 	private static final String TYPE_EVENT = "event";
 
-	private static class Action {
-		public String account;
-		public String name;
-
-		public String bin;
-		public JSONObject json;
-	}
-
 	private interface Callback {
 		void onCallback(Object result) throws Exception;
 	}
@@ -53,17 +44,17 @@ public class Scatter {
 		return sRequestCount;
 	}
 
-	private String mAccountName;
-	private String mPrivateKey;
-	private String mPublicKey;
+	private final AccountInfo mAccountInfo = new AccountInfo();
 
-	public void setInfo(String accountName, String privateKey, String publicKey) {
-		mAccountName = accountName;
-		mPrivateKey = privateKey;
-		mPublicKey = publicKey;
+	public AccountInfo getAccountInfo() {
+		return mAccountInfo;
 	}
 
 	public void onMessage(WebSocket webSocket, String message) throws Exception {
+		if (!mAccountInfo.enabled) {
+			return;
+		}
+
 		if (message.startsWith(PREFIX_CONNECT)) {
 			Log.d(Util.TAG, "scatter connect");
 		} else if (message.startsWith(PREFIX_EVENT)) {
@@ -95,13 +86,11 @@ public class Scatter {
 	}
 
 	private void showConfirmDialog(Object hint, int gravity, Callback callback) {
-		if (mAccountName == null) {
+		if (!mAccountInfo.enabled) {
 			return;
 		}
 
-		Activity activity = ActivityAccount.getInstance();
-
-		activity.runOnUiThread(() -> {
+		ActivityAccount.post((activity) -> {
 			DialogSimple dialog = new DialogSimple(activity);
 			dialog.setContent(hint);
 			dialog.setContentGravity(gravity);
@@ -129,9 +118,8 @@ public class Scatter {
 			});
 
 			dialog.show();
+			Util.changeToForeground(activity);
 		});
-
-		Util.changeToForeground(activity);
 	}
 
 	private void typePair(WebSocket webSocket, JSONObject data) {
@@ -175,6 +163,8 @@ public class Scatter {
 				return;
 			}
 
+			AccountInfo ai = Server.getScatter().getAccountInfo();
+
 			String blockchain = null;
 
 			try {
@@ -190,18 +180,18 @@ public class Scatter {
 			}
 
 			JSONObject account = new JSONObject();
-			account.put("name", mAccountName);
+			account.put("name", ai.name);
 			account.put("authority", "active");
 			account.put("blockchain", blockchain);
-			account.put("publicKey", mPublicKey);
+			account.put("publicKey", ai.publicKey);
 
 			JSONArray accounts = new JSONArray();
 			accounts.put(account);
 
 
 			JSONObject id = new JSONObject();
-			id.put("name", mAccountName);
-			id.put("publicKey", mPublicKey);
+			id.put("name", ai.name);
+			id.put("publicKey", ai.publicKey);
 			id.put("accounts", accounts);
 
 			callback.onCallback(id);
@@ -247,7 +237,9 @@ public class Scatter {
 				throw new IllegalArgumentException("illegal argument");
 			}
 
-			String sign = Eos.sign(bs, mPrivateKey);
+			AccountInfo ai = Server.getScatter().getAccountInfo();
+
+			String sign = Eos.sign(bs, ai.privateKey);
 			callback.onCallback(sign);
 		});
 	}
@@ -315,8 +307,10 @@ public class Scatter {
 			dt = origin;
 		}
 
+		AccountInfo ai = Server.getScatter().getAccountInfo();
+
 		String msg = Hash.sha256ToHex(dt) + Hash.sha256ToHex(nonce);
-		String result = Eos.sign(msg.getBytes(), mPrivateKey);
+		String result = Eos.sign(msg.getBytes(), ai.privateKey);
 
 		callback.onCallback(result);
 	}
