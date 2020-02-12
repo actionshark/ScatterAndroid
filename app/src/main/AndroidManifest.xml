@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.linkto.main.activity.ActivityMain"
+            android:name="com.linkto.main.activity.ActivityAccount"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,10 +25,6 @@
 
         <activity
             android:name="com.linkto.main.activity.ActivityEditKey"
-            android:launchMode="singleInstance" />
-
-        <activity
-            android:name="com.linkto.main.activity.ActivityAccount"
             android:launchMode="singleInstance" />
 
         <service android:name="com.linkto.main.activity.ForegroundService" />

@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.Gravity;
 
 import com.linkto.main.activity.ActivityAccount;
+import com.linkto.main.activity.ActivityBase;
 import com.linkto.main.activity.ForegroundService;
 import com.linkto.main.util.Hash;
 import com.linkto.main.util.Util;
@@ -90,7 +91,7 @@ public class Scatter {
 			return;
 		}
 
-		ActivityAccount.post((activity) -> {
+		ActivityBase.post((activity) -> {
 			DialogSimple dialog = new DialogSimple(activity);
 			dialog.setContent(hint);
 			dialog.setContentGravity(gravity);

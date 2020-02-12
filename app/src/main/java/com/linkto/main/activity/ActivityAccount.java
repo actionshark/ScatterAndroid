@@ -1,7 +1,5 @@
 package com.linkto.main.activity;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +11,6 @@ import android.widget.Toast;
 import com.linkto.main.core.AccountInfo;
 import com.linkto.main.core.Eos;
 import com.linkto.main.core.Server;
-import com.linkto.main.util.App;
 import com.linkto.main.util.Encryption;
 import com.linkto.main.util.Storage;
 import com.linkto.main.util.Util;
@@ -23,29 +20,7 @@ import com.linkto.scatter.R;
 
 import org.json.JSONObject;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class ActivityAccount extends ActivityBase {
-	public interface Task {
-		void onTask(Activity activity) throws Exception;
-	}
-
-	private static final Queue<Task> sTasks = new LinkedList<>();
-
-	public static void post(Task task) {
-		synchronized (sTasks) {
-			sTasks.offer(task);
-		}
-
-		Context context = App.getInstance();
-
-		Intent intent = new Intent();
-		intent.setClass(context, ActivityAccount.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		context.startActivity(intent);
-	}
-
 	private TextView mTvName;
 	private Button mBtnOpen;
 	private TextView mTvInfo;
@@ -53,6 +28,12 @@ public class ActivityAccount extends ActivityBase {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		String cipher = Storage.getString(Util.PRIVATE_KEY_CIPHER, null);
+		if (cipher == null) {
+			toEditKey();
+			return;
+		}
 
 		setContentView(R.layout.activity_account);
 
@@ -82,7 +63,7 @@ public class ActivityAccount extends ActivityBase {
 
 					Toast.makeText(ActivityAccount.this, R.string.delete_account_success,
 							Toast.LENGTH_SHORT).show();
-					backToMain();
+					toEditKey();
 				}
 			});
 			dialogSimple.show();
@@ -94,30 +75,6 @@ public class ActivityAccount extends ActivityBase {
 			mTvName.setText(ai.name);
 			updateInfo();
 		}
-
-		onNewIntent(getIntent());
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-
-		while (true) {
-			Task task;
-			synchronized (sTasks) {
-				task = sTasks.poll();
-			}
-
-			if (task == null) {
-				break;
-			}
-
-			try {
-				task.onTask(this);
-			} catch (Exception e) {
-				Log.e(Util.TAG, "onTask", e);
-			}
-		}
 	}
 
 	private void open() {
@@ -125,7 +82,7 @@ public class ActivityAccount extends ActivityBase {
 		if (cipher == null) {
 			Storage.remove(Util.PRIVATE_KEY_CIPHER);
 			Toast.makeText(this, R.string.not_valid_private, Toast.LENGTH_SHORT).show();
-			backToMain();
+			toEditKey();
 			return;
 		}
 
@@ -157,7 +114,7 @@ public class ActivityAccount extends ActivityBase {
 					if (ai.name == null) {
 						Toast.makeText(ActivityAccount.this, R.string.account_not_exist,
 								Toast.LENGTH_SHORT).show();
-						backToMain();
+						toEditKey();
 						return;
 					}
 
@@ -186,8 +143,8 @@ public class ActivityAccount extends ActivityBase {
 		ForegroundService.cancelService(this);
 	}
 
-	private void backToMain() {
-		Intent intent = new Intent(this, ActivityMain.class);
+	private void toEditKey() {
+		Intent intent = new Intent(this, ActivityEditKey.class);
 		startActivity(intent);
 
 		finish();
