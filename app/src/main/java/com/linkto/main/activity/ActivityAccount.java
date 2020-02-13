@@ -160,23 +160,14 @@ public class ActivityAccount extends ActivityBase {
 
 					ai.ram.total = info.optInt("ram_quota");
 					ai.ram.left = ai.ram.total - info.optInt("ram_usage");
-					if (ai.ram.left < 0) {
-						ai.ram.left = 0;
-					}
 
 					JSONObject cpu = info.optJSONObject("cpu_limit");
-					ai.cpu.total = cpu.optInt("available");
+					ai.cpu.total = cpu.optInt("max");
 					ai.cpu.left = ai.cpu.total - cpu.optInt("used");
-					if (ai.cpu.left < 0) {
-						ai.cpu.left = 0;
-					}
 
 					JSONObject net = info.optJSONObject("net_limit");
-					ai.net.total = net.optInt("available");
+					ai.net.total = net.optInt("max");
 					ai.net.left = ai.net.total - net.optInt("used");
-					if (ai.net.left < 0) {
-						ai.net.left = 0;
-					}
 
 					mTvInfo.setText(getString(R.string.account_info,
 							ai.balance,
