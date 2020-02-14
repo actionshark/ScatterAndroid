@@ -3,7 +3,11 @@ package com.linkto.main.util;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
 
+import com.linkto.main.core.AccountMgr;
 import com.linkto.main.core.Server;
 
 import java.util.List;
@@ -18,6 +22,8 @@ public class Util {
 
 	private static boolean sInited = false;
 
+	private static Handler sHandler = new Handler(Looper.getMainLooper());
+
 	public synchronized static void init(Context context) {
 		if (sInited) {
 			return;
@@ -26,6 +32,7 @@ public class Util {
 		sInited = true;
 
 		Storage.init(context);
+		AccountMgr.init();
 		Server.init();
 	}
 
@@ -86,5 +93,20 @@ public class Util {
 
 	public static void changeToBackground(Activity activity) {
 		activity.moveTaskToBack(true);
+	}
+
+	public static void runOnMainThread(Runnable runnable) {
+		sHandler.post(runnable);
+	}
+
+	public static void showToast(int resId, Object... args) {
+		String str = App.getInstance().getString(resId, args);
+		showToast(str);
+	}
+
+	public static void showToast(String str) {
+		runOnMainThread(() -> {
+			Toast.makeText(App.getInstance(), str, Toast.LENGTH_SHORT).show();
+		});
 	}
 }

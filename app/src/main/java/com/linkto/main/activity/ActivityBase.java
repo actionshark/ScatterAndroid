@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 
 import com.linkto.main.util.App;
 import com.linkto.main.util.Util;
@@ -52,7 +51,7 @@ public abstract class ActivityBase extends Activity {
 		Context context = App.getInstance();
 
 		Intent intent = new Intent();
-		intent.setClass(context, ActivityAccount.class);
+		intent.setClass(context, ActivityAccountInfo.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 	}
@@ -86,15 +85,6 @@ public abstract class ActivityBase extends Activity {
 		super.onNewIntent(intent);
 
 		checkTask();
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			return true;
-		}
-
-		return super.onKeyDown(keyCode, event);
 	}
 
 	private void checkTask() {

@@ -14,8 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.linkto.main.activity.ActivityAccount"
-            android:launchMode="singleInstance">
+            android:name="com.linkto.main.activity.ActivityAccountList"
+            android:launchMode="standard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,8 +24,12 @@
         </activity>
 
         <activity
-            android:name="com.linkto.main.activity.ActivityEditKey"
-            android:launchMode="singleInstance" />
+            android:name="com.linkto.main.activity.ActivityAccountInfo"
+            android:launchMode="standard" />
+
+        <activity
+            android:name="com.linkto.main.activity.ActivityImportAccount"
+            android:launchMode="standard" />
 
         <service android:name="com.linkto.main.activity.ForegroundService" />
     </application>

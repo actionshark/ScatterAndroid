@@ -3,7 +3,6 @@ package com.linkto.main.core;
 import android.util.Log;
 import android.view.Gravity;
 
-import com.linkto.main.activity.ActivityAccount;
 import com.linkto.main.activity.ActivityBase;
 import com.linkto.main.activity.ForegroundService;
 import com.linkto.main.util.Hash;
@@ -45,14 +44,8 @@ public class Scatter {
 		return sRequestCount;
 	}
 
-	private final AccountInfo mAccountInfo = new AccountInfo();
-
-	public AccountInfo getAccountInfo() {
-		return mAccountInfo;
-	}
-
 	public void onMessage(WebSocket webSocket, String message) throws Exception {
-		if (!mAccountInfo.enabled) {
+		if (AccountMgr.getOpenedAccount() == null) {
 			return;
 		}
 
@@ -87,7 +80,7 @@ public class Scatter {
 	}
 
 	private void showConfirmDialog(Object hint, int gravity, Callback callback) {
-		if (!mAccountInfo.enabled) {
+		if (AccountMgr.getOpenedAccount() == null) {
 			return;
 		}
 
@@ -164,7 +157,7 @@ public class Scatter {
 				return;
 			}
 
-			AccountInfo ai = Server.getScatter().getAccountInfo();
+			AccountInfo ai = AccountMgr.getOpenedAccount();
 
 			String blockchain = null;
 
@@ -238,7 +231,7 @@ public class Scatter {
 				throw new IllegalArgumentException("illegal argument");
 			}
 
-			AccountInfo ai = Server.getScatter().getAccountInfo();
+			AccountInfo ai = AccountMgr.getOpenedAccount();
 
 			String sign = Eos.sign(bs, ai.privateKey);
 			callback.onCallback(sign);
@@ -308,7 +301,7 @@ public class Scatter {
 			dt = origin;
 		}
 
-		AccountInfo ai = Server.getScatter().getAccountInfo();
+		AccountInfo ai = AccountMgr.getOpenedAccount();
 
 		String msg = Hash.sha256ToHex(dt) + Hash.sha256ToHex(nonce);
 		String result = Eos.sign(msg.getBytes(), ai.privateKey);

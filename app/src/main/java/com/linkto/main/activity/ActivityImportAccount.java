@@ -1,17 +1,15 @@
 package com.linkto.main.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.linkto.main.core.Eos;
-import com.linkto.main.util.Encryption;
-import com.linkto.main.util.Storage;
+import com.linkto.main.core.AccountMgr;
+import com.linkto.main.util.Broadcast;
 import com.linkto.main.util.Util;
 import com.linkto.scatter.R;
 
-public class ActivityEditKey extends ActivityBase {
+public class ActivityImportAccount extends ActivityBase implements Broadcast.Callback {
 	private EditText mEtPrivateKey;
 
 	private EditText mEtSetPassword;
@@ -21,7 +19,7 @@ public class ActivityEditKey extends ActivityBase {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_edit_key);
+		setContentView(R.layout.activity_import_account);
 
 		mEtPrivateKey = findViewById(R.id.et_private_key);
 
@@ -31,7 +29,7 @@ public class ActivityEditKey extends ActivityBase {
 		findViewById(R.id.btn_confirm).setOnClickListener((view) -> {
 			String password = mEtSetPassword.getText().toString();
 			if (password.length() < Util.PASSWORD_LENGTH_MIN || password.length() > Util.PASSWORD_LENGTH_MAX) {
-				Toast.makeText(ActivityEditKey.this,
+				Toast.makeText(ActivityImportAccount.this,
 						getString(R.string.password_length_error,
 								Util.PASSWORD_LENGTH_MIN, Util.PASSWORD_LENGTH_MAX),
 						Toast.LENGTH_SHORT).show();
@@ -40,51 +38,35 @@ public class ActivityEditKey extends ActivityBase {
 
 			String passwordRepeat = mEtRepeatPassword.getText().toString();
 			if (!password.equals(passwordRepeat)) {
-				Toast.makeText(ActivityEditKey.this,
+				Toast.makeText(ActivityImportAccount.this,
 						R.string.repeat_password_error,
 						Toast.LENGTH_SHORT).show();
 				return;
 			}
 
 			String privateKey = mEtPrivateKey.getText().toString();
-			String publicKey = Eos.privateToPublic(privateKey);
 
-			if (publicKey == null) {
-				Toast.makeText(ActivityEditKey.this,
-						R.string.not_valid_private,
-						Toast.LENGTH_SHORT).show();
-				return;
-			}
+			AccountMgr.importAccount(privateKey, password);
 
-			new Thread(() -> {
-				String account = Eos.getKeyAccounts(publicKey);
-				runOnUiThread(() -> {
-					if (account == null) {
-						Toast.makeText(ActivityEditKey.this,
-								R.string.account_not_exist,
-								Toast.LENGTH_SHORT).show();
-						return;
-					}
-
-					String cipher = Encryption.encode(password, privateKey);
-					Storage.set(Util.PRIVATE_KEY_CIPHER, cipher);
-
-					Toast.makeText(ActivityEditKey.this,
-							R.string.import_account_success,
-							Toast.LENGTH_SHORT).show();
-
-					Intent intent = new Intent();
-					intent.setClass(ActivityEditKey.this, ActivityAccount.class);
-					startActivity(intent);
-
-					finish();
-				});
-			}
-			).start();
-
-			Toast.makeText(ActivityEditKey.this,
+			Toast.makeText(ActivityImportAccount.this,
 					R.string.wait_a_moment,
 					Toast.LENGTH_SHORT).show();
 		});
+
+		Broadcast.addListener(Broadcast.NAME_ACCOUNT_IMPORTED, this, true);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		Broadcast.removeListener(null, this);
+	}
+
+	@Override
+	public void onBroadcast(String name, Object data) {
+		if (Broadcast.NAME_ACCOUNT_IMPORTED.equals(name)) {
+			finish();
+		}
 	}
 }
