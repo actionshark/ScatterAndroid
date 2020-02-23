@@ -56,7 +56,7 @@ public class Scatter {
 			String type = msg.optString(0);
 			JSONObject data = msg.optJSONObject(1).optJSONObject("data");
 
-			String name = "type" + type.substring(0, 1).toUpperCase() + type.substring(1);
+            String name = String.format("type%s%s", type.substring(0, 1).toUpperCase(), type.substring(1));
 			Method method = Scatter.class.getDeclaredMethod(name, WebSocket.class, JSONObject.class);
 			method.invoke(this, webSocket, data);
 		} else {
@@ -73,7 +73,7 @@ public class Scatter {
 		params.put(type);
 		params.put(data);
 
-		String message = PREFIX_EVENT + "," + params;
+        String message = String.format("%s,%s", PREFIX_EVENT, params.toString());
 		webSocket.send(message);
 
 		Log.d(Util.TAG, "send: " + message);
@@ -134,7 +134,7 @@ public class Scatter {
 		};
 
 		String type = data.optString("type");
-		String name = "api" + type.substring(0, 1).toUpperCase() + type.substring(1);
+        String name = String.format("api%s%s", type.substring(0, 1).toUpperCase(), type.substring(1));
 
 		try {
 			Method method = Scatter.class.getDeclaredMethod(name, JSONObject.class, Callback.class);
